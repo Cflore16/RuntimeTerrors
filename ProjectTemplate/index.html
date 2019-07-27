@@ -62,6 +62,22 @@
             document.getElementById(tabName).style.display = "block";
             event.currentTarget.className += " active";
         }
+        //Function which will create an user object
+        function createUser() {
+            employeeID = getElementById("EID").value;
+            password = getElementById("PW").value;
+            firstName = getElementByID("FN").value;
+            lastName = getElementByID("LN").value;
+            email = getElementByID("EM").value;
+            var user = new Object();
+            user.ID = employeeID;
+            user.pass = password;
+            user.first = firstName;
+            user.last = lastName;
+            user.mail = email;
+
+        }
+
     </script>
     <!--END OF YOUR OWN JAVASCRIPT-->
 
@@ -693,27 +709,27 @@
             <br><br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" class="text" value="Employee ID" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Employee ID';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="EID" type="text" class="text" value="Employee ID" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Employee ID';}"></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input type="password" class="text" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="PW" type="password" class="text" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}"></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" class="text" value="First name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'First name';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="FN" type="text" class="text" value="First name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'First name';}"></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" class="text" value="Last name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Last Name';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="LN" type="text" class="text" value="Last name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Last Name';}"></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" class="text" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="EM" type="text" class="text" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}"></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br>
