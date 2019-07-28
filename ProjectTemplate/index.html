@@ -65,7 +65,6 @@
         }
 
         function LogonShowTab(event, tabName) {
-            document.getElementById('loginPage').style.display = "none";
 
             var uidValue = document.getElementById("inputEmployeeId").value;
             var passValue = document.getElementById("inputPassword").value;
@@ -85,11 +84,13 @@
                     // alert(responseFromServer);
 
                     if (responseFromServer == true) {
+                        document.getElementById('loginPage').style.display = "none";
                         showTab(event, tabName);
                     }
                     else {
                         alert("Employee ID or password is incorrect. Please try again.");
-                        window.location.reload();
+
+                        document.getElementById("inputPassword").value = "Password";
                     }
                 },
                 error: function (e) {
@@ -98,7 +99,36 @@
             });
         }
 
-        //Function creates an user object 
+        function logout() {
+
+            var webMethod = "ProjectServices.asmx/LogOn";
+            var parameters = "{\"uid\":\"" + encodeURI("logmeout") + "\",\"pass\":\"" + encodeURI("123456") + "\"}";
+
+            jQuery.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var responseFromServer = msg.d;
+                    // alert(responseFromServer);
+
+                    if (responseFromServer == true) {
+                        alert("Logout Failed");
+                    }
+                    else {
+                        window.location.reload();
+                    }
+                },
+                error: function (e) {
+                    window.location.reload();
+                }
+            });
+        }
+
+
+        //Function creates an user object
         function createUser() {
             userID = getElementById("EID").value;
             password = getElementById("PW").value;
@@ -117,6 +147,7 @@
     </script>
     <!--END OF YOUR OWN JAVASCRIPT-->
 
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <!--AND YOUR OWN CSS CAN GO HERE AS WELL-->
 
@@ -694,9 +725,9 @@
         </div>
         <br>
 
-        <br><br>
+        <!--<br><br>
         <button class="whiteBut" onclick="javascript: TestButtonHandler();">Click here to test connection!</button>
-        <br>
+        <br>-->
     </div>
 
     <div id="homePage" class="tabContent">
@@ -730,7 +761,7 @@
             <br><br><br>
             <div class="row">
                 <div class="col-lg-08 col-md-07 col-sm-07 wht"></div>
-                <div class="col-lg-04 col-md-05 col-sm-05 cya"><button class="cya hoverCya" onclick="showTab(event, 'loginPage')">Log off</button></div>
+                <div class="col-lg-04 col-md-05 col-sm-05 cya"><button class="cya hoverCya" onclick="logout()">Log off</button></div>
             </div>
         </div>
     </div>
