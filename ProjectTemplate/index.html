@@ -7,6 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
     <script type="text/javascript">
+
         function TestButtonHandler() {
             var webMethod = "ProjectServices.asmx/TestConnection";
             var parameters = "{}";
@@ -99,6 +100,53 @@
             });
         }
 
+        function LogonShowTab(event, tabName) {
+
+            var uidValue = document.getElementById("inputEmployeeId").value;
+            var passValue = document.getElementById("inputPassword").value;
+
+            var webMethod = "ProjectServices.asmx/LogOn";
+            var parameters = "{\"uid\":\"" + encodeURI(uidValue) + "\",\"pass\":\"" + encodeURI(passValue) + "\"}";
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var currentLogon = msg.d;
+
+                    debugger;
+                    // alert(responseFromServer);
+
+                    if (currentLogon.success == true) {
+                        if (currentLogon.adminFlag == true) {
+                            document.getElementById('loginPage').style.display = "none";
+                            debugger;
+                            showTab(event, 'adminHomePage');
+                        }
+                        else {
+                            document.getElementById('loginPage').style.display = "none";
+                            debugger;
+                            showTab(event, 'homePage');
+                        }
+
+                    }
+                    else {
+                        alert("Employee ID or password is incorrect. Please try again.");
+
+                        document.getElementById("inputPassword").value = "Password";
+                    }
+                },
+                error: function (e) {
+                    debugger;
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+
         function logout() {
 
             var webMethod = "ProjectServices.asmx/LogOn";
@@ -127,6 +175,36 @@
             });
         }
 
+        //Dispalys account request on accountsListPage
+        function LoadAccountRequests() {
+            var webMethod = "ProjectServices.asmx/GetAccountRequests";
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    if (msg.d.length > 0) {
+                        //$("#requestsBox").empty();
+                        //admin = false;
+                        for (var i = 0; i < msg.d.length; i++) {
+                            req = "<li class='AccountList'> <a  href='' onclick='showTab(event, 'accountApprovalPage')' class='accountLA'>"
+                                + "EmployeeID: " + msg.d[i].employeeId + "    First Name: " + msg.d[i].firstName + "    Last Name: " + msg.d[i].lastName
+                                + "</a></li>";                               
+                            $("#pendingAccountRequestList").append(req);
+                        }
+
+                        document.getElementById('loginPage').style.display = "none";
+                        showTab(event, 'accountsListPage');
+                    }
+                    //accountWindowShowing = false;
+                    //ShowMenu();
+                },
+                error: function (e) {
+                    alert("Error communicating with the server.");
+                }
+            });
+        }
 
         //Function creates an user object
         function createUser() {
@@ -885,11 +963,12 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Admin Home</h2></div>
             </div>
             <br><br><br>
-            <div class="row">
-                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut tallBut" onclick="showTab(event, 'accountsListPage')">Manage Users</button></div>
-                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-            </div>
+                    <div class="row">
+                        <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                        <!--<div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut tallBut" onclick="showTab(event, 'accountsListPage')">Manage Users</button></div>-->
+                        <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut tallBut" onclick="LoadAccountRequests()">Manage Users</button></div>
+                        <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                    </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 blu"><button class="blu hoverBlu whiteBut tallBut" onclick="showTab(event, 'viewByDepartPage')">View Feedback</button></div>
@@ -915,8 +994,8 @@
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 gry">
-                    <ul>
-                        <li class="accountList"><a onclick="showTab(event, 'accountApprovalPage')" class="accountLA">list accounts here</a></li>
+                    <ul id="pendingAccountRequestList">
+                        <!--<li class="accountList"><a onclick="showTab(event, 'accountApprovalPage')" class="accountLA">list accounts here</a></li>-->
                     </ul>
                 </div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
