@@ -81,10 +81,16 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (msg) {
-                    // var responseFromServer = msg.d;
-                   // alert(responseFromServer);
+                    var responseFromServer = msg.d;
+                    // alert(responseFromServer);
 
-                    showTab(event, tabName);
+                    if (responseFromServer == true) {
+                        showTab(event, tabName);
+                    }
+                    else {
+                        alert("Employee ID or password is incorrect. Please try again.");
+                        window.location.reload();
+                    }
                 },
                 error: function (e) {
                     alert("this code will only execute if javascript is unable to access the webservice");
