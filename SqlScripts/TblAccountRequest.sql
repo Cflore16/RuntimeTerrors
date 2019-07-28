@@ -3,7 +3,7 @@ USE runtime
 DROP TABLE IF EXISTS `AccountRequest`
 ;
 CREATE TABLE runtime.AccountRequest (
-	AccountRequestId INT NOT NULL AUTO_INCREMENT,
+	-- AccountRequestId INT NOT NULL AUTO_INCREMENT,
     EmployeeId VARCHAR(15) NOT NULL,
     AcctPassword VARCHAR(255) NOT NULL,
     FirstName VARCHAR(60) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE runtime.AccountRequest (
     Email VARCHAR(60) NOT NULL,
     RequestDt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     AccountApproval CHAR(1) DEFAULT NULL,
-    CONSTRAINT Pk_AccountRequest PRIMARY KEY (AccountRequestId),
+    CONSTRAINT Pk_AccountRequest PRIMARY KEY (EmployeeId),
     CONSTRAINT Ck_AccountRequest_AccountApproval CHECK (AccountApproval IN ('A', 'D'))
 )
 ;
