@@ -178,36 +178,46 @@
         function LoadAccountDetail(ID) {
 
             console.log(ID);
-            //debugger;
-            //var employeeIdValue = ID;
-            //debugger;
+            debugger;
+            var employeeIdValue = ID;
+            debugger;
 
-            //var webMethod = "ProjectServices.asmx/GetAccountDetails";
-            //var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
+            var webMethod = "ProjectServices.asmx/GetAccountDetails";
+            var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
 
-            //debugger;
-            ////jQuery ajax method
-            //$.ajax({
-            //    type: "POST",
-            //    url: webMethod,
-            //    data: parameters,
-            //    contentType: "application/json; charset=utf-8",
-            //    dataType: "json",
-            //    success: function (msg) {
-            //        var accountRequestDetail = msg.d;
+            debugger;
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var accountRequestDetail = msg.d;
 
-            //        debugger;
+                    console.log(accountRequestDetail);
 
-            //        document.getElementById("ArDetailEmployeeId").innerHTML = accountRequestDetail.employeeId;
-            //        document.getElementById("ArDetailFirstName").innerHTML = accountRequestDetail.firstName;
-            //        document.getElementById("ArDetailLastName").innerHTML = accountRequestDetail.lastName;
-            //        document.getElementById("ArDetailEmail").innerHTML = accountRequestDetail.email;
-            //    },
-            //    error: function (e) {
-            //        debugger;
-            //        alert("this code will only execute if javascript is unable to access the webservice");
-            //    }
-            //});
+                    debugger;
+
+                    var id = document.getElementById("ArDetailEmployeeId");
+                    id.value = accountRequestDetail.employeeId;
+
+                    var fName = document.getElementById("ArDetailFirstName");
+                    fName.value = accountRequestDetail.firstName;
+
+                    var lName = document.getElementById("ArDetailLastName");
+                    lName.value = accountRequestDetail.lastName;
+
+
+                    var email = document.getElementById("ArDetailEmail")
+                    email.value = accountRequestDetail.email;
+                },
+                error: function (e) {
+                    debugger;
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
         }
 
         //Function creates an user object
@@ -1325,22 +1335,22 @@
             <br><br>
                 <div class="row">
                     <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                    <div class="col-lg-10 col-md-12 col-sm-12"><input id="ArDetailEmployeeId" type="text" class="text" value="Employee ID" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Employee ID';}"></div>
+                    <div class="col-lg-10 col-md-12 col-sm-12"><input id="ArDetailEmployeeId" type="text" class="text" value=""></div>
                     <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input id="ArDetailFirstName" type="text" class="text" value="First name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'First name';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="ArDetailFirstName" type="text" class="text" value=""></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input id="ArDetailLastName" type="text" class="text" value="Last name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Last Name';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="ArDetailLastName" type="text" class="text" value=""></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input id="ArDetailEmail" type="text" class="text" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="ArDetailEmail" type="text" class="text" value=""></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br>
