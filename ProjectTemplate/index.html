@@ -63,7 +63,7 @@
             document.getElementById(tabName).style.display = "block";
             event.className += " active";
             // removed event.currentTarget.className
-        }
+        }        
 
         function LogonShowTab(event, tabName) {
 
@@ -72,42 +72,7 @@
 
             var webMethod = "ProjectServices.asmx/LogOn";
             var parameters = "{\"uid\":\"" + encodeURI(uidValue) + "\",\"pass\":\"" + encodeURI(passValue) + "\"}";
-
-            //jQuery ajax method
-            $.ajax({
-                type: "POST",
-                url: webMethod,
-                data: parameters,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (msg) {
-                    var responseFromServer = msg.d;
-                    // alert(responseFromServer);
-
-                    if (responseFromServer == true) {
-                        document.getElementById('loginPage').style.display = "none";
-                        showTab(event, tabName);
-                    }
-                    else {
-                        alert("Employee ID or password is incorrect. Please try again.");
-
-                        document.getElementById("inputPassword").value = "Password";
-                    }
-                },
-                error: function (e) {
-                    alert("this code will only execute if javascript is unable to access the webservice");
-                }
-            });
-        }
-
-        function LogonShowTab(event, tabName) {
-
-            var uidValue = document.getElementById("inputEmployeeId").value;
-            var passValue = document.getElementById("inputPassword").value;
-
-            var webMethod = "ProjectServices.asmx/LogOn";
-            var parameters = "{\"uid\":\"" + encodeURI(uidValue) + "\",\"pass\":\"" + encodeURI(passValue) + "\"}";
-
+            debugger;
             //jQuery ajax method
             $.ajax({
                 type: "POST",
@@ -185,23 +150,60 @@
                 dataType: "json",
                 success: function (msg) {
                     if (msg.d.length > 0) {
-                        //$("#requestsBox").empty();
-                        //admin = false;
+
                         for (var i = 0; i < msg.d.length; i++) {
-                            req = "<li class=\"accountList\"> <a href=\"javascript:showTab(event, 'accountApprovalPage');\" class=\"accountLA\" \"accountLA:hover\">"
+                            req = "<li class=\"accountList\"> <a href=\"javascript:showTab(event, 'accountApprovalPage');\" class=\"accountLA\" \"accountLA:hover\" data-employeeId='" + msg.d[i].employeeId + "'>"
                                 + "#" + "<strong>" + msg.d[i].employeeId + "</strong>" + " - " + msg.d[i].firstName + " " + msg.d[i].lastName
                                 + "</a></li>";                               
                             $("#pendingAccountRequestList").append(req);
                         }
 
+                        //for (var i = 0; i < msg.d.length; i++) {
+                        //    req = "<li class=\"accountList\"> <a href=\"javascript:LoadAccountDetail(event);\" class=\"accountLA\" \"accountLA:hover\" data-employeeId='" + msg.d[i].employeeId + "'>"
+                        //        + "#" + "<strong>" + msg.d[i].employeeId + "</strong>" + " - " + msg.d[i].firstName + " " + msg.d[i].lastName
+                        //        + "</a></li>";                               
+                        //    $("#pendingAccountRequestList").append(req);
+                        //}
+
                         document.getElementById('loginPage').style.display = "none";
                         showTab(event, 'accountsListPage');
                     }
-                    //accountWindowShowing = false;
-                    //ShowMenu();
                 },
                 error: function (e) {
                     alert("Error communicating with the server.");
+                }
+            });
+        }
+
+        function LoadAccountDetail(event) {
+            debugger;
+            var employeeIdValue = event.currentTarget.getAttribute("data-employeeId");
+            debugger;
+
+            var webMethod = "ProjectServices.asmx/GetAccountDetails";
+            var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
+
+            debugger;
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var accountRequestDetail = msg.d;
+
+                    debugger;
+
+                    document.getElementById("ArDetailEmployeeId").innerHTML = accountRequestDetail.employeeId;
+                    document.getElementById("ArDetailFirstName").innerHTML = accountRequestDetail.firstName;
+                    document.getElementById("ArDetailLastName").innerHTML = accountRequestDetail.lastName;
+                    document.getElementById("ArDetailEmail").innerHTML = accountRequestDetail.email;
+                },
+                error: function (e) {
+                    debugger;
+                    alert("this code will only execute if javascript is unable to access the webservice");
                 }
             });
         }
@@ -1040,6 +1042,7 @@
             <br><br><br>
         </div>
     </div>
+
     <div id="viewByDepartPage" class="tabContent">
         <br>
         <div class="AppBackground">
@@ -1318,24 +1321,24 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Account Approval</h2></div>
             </div>
             <br><br>
+                <div class="row">
+                    <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                    <div class="col-lg-10 col-md-12 col-sm-12"><input id="ArDetailEmployeeId" type="text" class="text" value="Employee ID" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Employee ID';}"></div>
+                    <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" class="text" value="Employee ID" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Employee ID';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="ArDetailFirstName" type="text" class="text" value="First name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'First name';}"></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" class="text" value="First name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'First name';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="ArDetailLastName" type="text" class="text" value="Last name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Last Name';}"></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" class="text" value="Last name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Last Name';}"></div>
-                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-            </div>
-            <div class="row">
-                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" class="text" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="ArDetailEmail" type="text" class="text" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}"></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br>

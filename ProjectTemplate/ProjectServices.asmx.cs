@@ -148,11 +148,13 @@ namespace ProjectTemplate
                 //flip our flag to true so we return a value that lets them know they're logged in
                 currentLogon.success = true;
                 currentLogon.employeeId = sqlDt.Rows[0]["EmployeeId"].ToString();
+                if (sqlDt.Rows[0]["AdminFlag"].ToString().ToUpper() == "X")
+                {
+                    currentLogon.adminFlag = true;
+                }
+
             }
-            if (sqlDt.Rows[0]["AdminFlag"].ToString().ToUpper() == "X")
-            {
-                currentLogon.adminFlag = true;
-            }
+            
             //return the result!
             return currentLogon;
         }
@@ -161,40 +163,71 @@ namespace ProjectTemplate
         [WebMethod(EnableSession = true)]
         public PendingAccountRequest[] GetAccountRequests()
         {//LOGIC: get all account requests and return them!
-            //if (Convert.ToInt32(Session["admin"]) == 1)
-            //{
-                DataTable sqlDt = new DataTable("accountrequests");
+            DataTable sqlDt = new DataTable("accountrequests");
 
-                string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
-                //requests just have active set to 0
-                string sqlSelect = "select EmployeeId, AcctPassword, FirstName, LastName, Email, RequestDt from runtime.AccountRequest where AccountApproval IS NULL order by RequestDt";
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            
+            string sqlSelect = "SELECT EmployeeId, AcctPassword, FirstName, LastName, Email, RequestDt FROM runtime.AccountRequest WHERE AccountApproval IS NULL order by RequestDt";
 
-                MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
-                MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
 
-                MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
-                sqlDa.Fill(sqlDt);
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            sqlDa.Fill(sqlDt);
 
-                List<PendingAccountRequest> accountRequests = new List<PendingAccountRequest>();
-                for (int i = 0; i < sqlDt.Rows.Count; i++)
+            List<PendingAccountRequest> accountRequests = new List<PendingAccountRequest>();
+            for (int i = 0; i < sqlDt.Rows.Count; i++)
+            {
+                accountRequests.Add(new PendingAccountRequest
                 {
-                    accountRequests.Add(new PendingAccountRequest
-                    {
-                        employeeId = sqlDt.Rows[i]["EmployeeId"].ToString(),
-                        acctPassword = sqlDt.Rows[i]["AcctPassword"].ToString(),
-                        firstName = sqlDt.Rows[i]["FirstName"].ToString(),
-                        lastName = sqlDt.Rows[i]["LastName"].ToString(),
-                        email = sqlDt.Rows[i]["Email"].ToString(),
-                        requestDt = sqlDt.Rows[i]["RequestDt"].ToString()
-                    });
-                }
-                //convert the list of accounts to an array and return!
-                return accountRequests.ToArray();
-            //}
-            //else
-            //{
-            //    return new Account[0];
-            //}
+                    employeeId = sqlDt.Rows[i]["EmployeeId"].ToString(),
+                    acctPassword = sqlDt.Rows[i]["AcctPassword"].ToString(),
+                    firstName = sqlDt.Rows[i]["FirstName"].ToString(),
+                    lastName = sqlDt.Rows[i]["LastName"].ToString(),
+                    email = sqlDt.Rows[i]["Email"].ToString(),
+                    requestDt = sqlDt.Rows[i]["RequestDt"].ToString()
+                });
+            }
+            //convert the list of accounts to an array and return!
+            return accountRequests.ToArray();
+        }
+
+        [WebMethod(EnableSession = true)]
+        public PendingAccountRequest GetAccountDetails(string employeeId)
+        {
+            PendingAccountRequest pendingAccount = new PendingAccountRequest();
+            
+            //our connection string comes from our web.config file like we talked about earlier
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            //here's our query.  A basic select with nothing fancy.  Note the parameters that begin with @
+            string sqlSelect = "SELECT employeeId, adminFlag FROM Account WHERE employeeId=@idValue and AcctPassword=@passValue";
+
+            //set up our connection object to be ready to use our connection string
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            //set up our command object to use our connection, and our query
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            //tell our command to replace the @parameters with real values
+            //we decode them because they came to us via the web so they were encoded
+            //for transmission (funky characters escaped, mostly)
+            sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(employeeId));
+
+            //a data adapter acts like a bridge between our command object and 
+            //the data we are trying to get back and put in a table object
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            //here's the table we want to fill with the results from our query
+            DataTable sqlDt = new DataTable();
+            //here we go filling it!
+            sqlDa.Fill(sqlDt);
+
+            pendingAccount.employeeId = sqlDt.Rows[0]["EmployeeId"].ToString();
+            pendingAccount.acctPassword = sqlDt.Rows[0]["AcctPassword"].ToString();
+            pendingAccount.firstName = sqlDt.Rows[0]["FirstName"].ToString();
+            pendingAccount.lastName = sqlDt.Rows[0]["LastName"].ToString();
+            pendingAccount.email = sqlDt.Rows[0]["Email"].ToString();
+            pendingAccount.requestDt = sqlDt.Rows[0]["RequestDt"].ToString();
+
+            return pendingAccount;
         }
     }
 }
