@@ -229,5 +229,77 @@ namespace ProjectTemplate
 
             return pendingAccount;
         }
+        [WebMethod]
+        public bool approveOrDeny(string userInput)
+        {
+            bool success = false;
+            //our connection string comes from our web.config file likw we talked about earlier
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            //here's our query. A basic select with nothing fancy. Note the parameters that begin with @
+            string sqlSelect = "select EmployeeId from AccountRequest where EmployeeID=@idValue AND AccountApproval="A"";
+            //set up our connection object to be ready to use our connection string
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            //set up our command object to use our connection, and our query
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+            //tell our command to replace the @parameters with real values
+            sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(userInput));
+            //a data adapter acts like a bridge between our command object and 
+            //the data we are trying to get back and put in a table object
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            //here's the table we want to fill with the results from our query
+            DataTable sqlDt = new DataTable();
+            //here we go filling it!
+            sqlDa.Fill(sqlDt);
+            //check the result
+            if (sqlDt.Rows.Count > 0)
+            {
+                success = true;
+            }
+            return success;
+            
+            
+
+
+
+
+
+
+
+        }
+        [WebMethod]
+        public void insertWhenSuccess(string id, string password,string firstname,string lastname, string email)
+        {
+            string feedback = "Your successfully created your account";
+            string status = "A";
+       
+            //our connection string comes from our web.config file likw we talked about earlier
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            //here's our query. A basic select with nothing fancy. Note the parameters that begin with @
+            string sqlSelect = "INSERT INTO AccountRequest(EmployeeId,AcctPassword,FirstName,LastName,Email,AccountApproval) VALUES (@id,@pass,@first,@last,@email,@status)";
+            //set up our connection object to be ready to use our connection string
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            //set up our command object to use our connection, and our query
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+            //tell our command to replace the @parameters with real values
+            sqlCommand.Parameters.AddWithValue("@id", HttpUtility.UrlDecode(id));
+            sqlCommand.Parameters.AddWithValue("@pass", HttpUtility.UrlDecode(password));
+            sqlCommand.Parameters.AddWithValue("@first", HttpUtility.UrlDecode(firstname));
+            sqlCommand.Parameters.AddWithValue("@last", HttpUtility.UrlDecode(lastname));
+            sqlCommand.Parameters.AddWithValue("@email", HttpUtility.UrlDecode(email));
+            sqlCommand.Parameters.AddWithValue("@status", HttpUtility.UrlDecode(status));
+            sqlConnection.Open();
+            try
+            {
+                int accountID = Convert.ToInt32(sqlCommand.ExecuteScalar());
+            }
+            catch (Exception e)
+            {
+                sqlConnection.close();
+            }
+
+
+
+        }
+
     }
 }
