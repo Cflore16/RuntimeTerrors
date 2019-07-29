@@ -277,5 +277,40 @@ namespace ProjectTemplate
                 }
             }
         }
+
+        [WebMethod(EnableSession = true)]
+        public string ApproveAccountRequest(string employeeId)
+        {
+            string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            MySqlConnection conn = new MySqlConnection(connStr);
+            string sql = "INSERT INTO Account(EmployeeId, AcctPassword, FirstName, LastName, Email) SELECT EmployeeId, AcctPassword, FirstName, LastName, Email FROM AccountRequest WHERE AccountRequest.EmployeeId=@idValue";
+            string sql2 = "DELETE FROM AccountRequest WHERE EmployeeId=@idValue";
+
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            MySqlCommand cmd2 = new MySqlCommand(sql2, conn);
+            cmd.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(employeeId));
+            cmd2.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(employeeId));
+
+            try
+            {
+                conn.Open();
+
+                cmd.ExecuteNonQuery();
+                cmd2.ExecuteNonQuery();
+
+                return "account approval success";
+            }
+            catch (Exception)
+            {
+                return "account approval failed";
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
+        }
     }
 }

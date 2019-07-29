@@ -142,6 +142,8 @@
 
         //Dispalys account request on accountsListPage
         function LoadAccountRequests() {
+            document.getElementById("pendingAccountRequestList").innerHTML = "";
+
             var webMethod = "ProjectServices.asmx/GetAccountRequests";
             $.ajax({
                 type: "POST",
@@ -149,8 +151,8 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (msg) {
-                    if (msg.d.length > 0) {
 
+                    if (msg.d.length > 0) {
                         for (var i = 0; i < msg.d.length; i++) {
                             req = "<li class=\"accountList\"> <a href=\"#\" class=\"accountLA\" \"accountLA:hover\" ID='" + msg.d[i].employeeId + "' onclick=\"showTab(event, 'accountApprovalPage'); LoadAccountDetail(this.id);\">"
                                 + "#" + "<strong>" + msg.d[i].employeeId + "</strong>" + " - " + msg.d[i].firstName + " " + msg.d[i].lastName
@@ -245,6 +247,36 @@
                 },
                 error: function (e) {
                      
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+
+        function ApproveAccount() {
+            var employeeIdValue = document.getElementById("ArDetailEmployeeId").value;
+
+            var webMethod = "ProjectServices.asmx/ApproveAccountRequest";
+            var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
+
+            console.log("web service id value: " + employeeIdValue);
+
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var accountDenyMsg = msg.d;
+
+                    console.log(accountDenyMsg);
+
+                },
+                error: function (e) {
+
                     alert("this code will only execute if javascript is unable to access the webservice");
                 }
             });
@@ -1386,12 +1418,12 @@
             <br><br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="showTab(event, 'accountsListPage')">Approve</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="ApproveAccount(); setTimeout( LoadAccountRequests, 2000 )">Approve</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut" onclick="DenyAccount(); showTab(event, 'accountsListPage')">Deny</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut" onclick="DenyAccount(); setTimeout( LoadAccountRequests, 2000 )">Deny</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
