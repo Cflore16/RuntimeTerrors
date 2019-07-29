@@ -152,18 +152,18 @@
                     if (msg.d.length > 0) {
 
                         for (var i = 0; i < msg.d.length; i++) {
-                            req = "<li class=\"accountList\"> <a href=\"javascript:showTab(event, 'accountApprovalPage');\" class=\"accountLA\" \"accountLA:hover\" data-employeeId='" + msg.d[i].employeeId + "'>"
+                            req = "<li class=\"accountList\"> <a href=\"#\" class=\"accountLA\" \"accountLA:hover\" ID='" + msg.d[i].employeeId + "' onclick=\"showTab(event, 'accountApprovalPage'); LoadAccountDetail(this.id);\">"
                                 + "#" + "<strong>" + msg.d[i].employeeId + "</strong>" + " - " + msg.d[i].firstName + " " + msg.d[i].lastName
                                 + "</a></li>";                               
                             $("#pendingAccountRequestList").append(req);
-                        }
 
-                        //for (var i = 0; i < msg.d.length; i++) {
-                        //    req = "<li class=\"accountList\"> <a href=\"javascript:LoadAccountDetail(event);\" class=\"accountLA\" \"accountLA:hover\" data-employeeId='" + msg.d[i].employeeId + "'>"
-                        //        + "#" + "<strong>" + msg.d[i].employeeId + "</strong>" + " - " + msg.d[i].firstName + " " + msg.d[i].lastName
-                        //        + "</a></li>";                               
-                        //    $("#pendingAccountRequestList").append(req);
-                        //}
+                            accountElems = document.getElementsByClassName("accountLA");
+                            for (j = 0; j < accountElems.length; j++) {
+                                accountElems[j].ID = msg.d[i].employeeId;
+                            }
+                        } 
+
+                      
 
                         document.getElementById('loginPage').style.display = "none";
                         showTab(event, 'accountsListPage');
@@ -175,37 +175,39 @@
             });
         }
 
-        function LoadAccountDetail(event) {
-            debugger;
-            var employeeIdValue = event.currentTarget.getAttribute("data-employeeId");
-            debugger;
+        function LoadAccountDetail(ID) {
 
-            var webMethod = "ProjectServices.asmx/GetAccountDetails";
-            var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
+            console.log(ID);
+            //debugger;
+            //var employeeIdValue = ID;
+            //debugger;
 
-            debugger;
-            //jQuery ajax method
-            $.ajax({
-                type: "POST",
-                url: webMethod,
-                data: parameters,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (msg) {
-                    var accountRequestDetail = msg.d;
+            //var webMethod = "ProjectServices.asmx/GetAccountDetails";
+            //var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
 
-                    debugger;
+            //debugger;
+            ////jQuery ajax method
+            //$.ajax({
+            //    type: "POST",
+            //    url: webMethod,
+            //    data: parameters,
+            //    contentType: "application/json; charset=utf-8",
+            //    dataType: "json",
+            //    success: function (msg) {
+            //        var accountRequestDetail = msg.d;
 
-                    document.getElementById("ArDetailEmployeeId").innerHTML = accountRequestDetail.employeeId;
-                    document.getElementById("ArDetailFirstName").innerHTML = accountRequestDetail.firstName;
-                    document.getElementById("ArDetailLastName").innerHTML = accountRequestDetail.lastName;
-                    document.getElementById("ArDetailEmail").innerHTML = accountRequestDetail.email;
-                },
-                error: function (e) {
-                    debugger;
-                    alert("this code will only execute if javascript is unable to access the webservice");
-                }
-            });
+            //        debugger;
+
+            //        document.getElementById("ArDetailEmployeeId").innerHTML = accountRequestDetail.employeeId;
+            //        document.getElementById("ArDetailFirstName").innerHTML = accountRequestDetail.firstName;
+            //        document.getElementById("ArDetailLastName").innerHTML = accountRequestDetail.lastName;
+            //        document.getElementById("ArDetailEmail").innerHTML = accountRequestDetail.email;
+            //    },
+            //    error: function (e) {
+            //        debugger;
+            //        alert("this code will only execute if javascript is unable to access the webservice");
+            //    }
+            //});
         }
 
         //Function creates an user object
