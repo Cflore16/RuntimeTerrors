@@ -245,23 +245,37 @@ namespace ProjectTemplate
             }
 
             return pendingAccount;
+        }
 
-            ////a data adapter acts like a bridge between our command object and 
-            ////the data we are trying to get back and put in a table object
-            //MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
-            ////here's the table we want to fill with the results from our query
-            //DataTable sqlDt = new DataTable("accountrequests");
-            ////here we go filling it!
-            //sqlDa.Fill(sqlDt);
+        [WebMethod(EnableSession = true)]
+        public string DenyAccountRequest(string employeeId)
+        {
+            string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            MySqlConnection conn = new MySqlConnection(connStr);
+            string sql = "DELETE FROM AccountRequest WHERE EmployeeId=@idValue";
 
-            //pendingAccount.employeeId = sqlDt.Rows[0]["EmployeeId"].ToString();
-            //pendingAccount.acctPassword = sqlDt.Rows[0]["pendingAccount.acctPassword"].ToString();
-            //pendingAccount.firstName = sqlDt.Rows[0]["FirstName"].ToString();
-            //pendingAccount.lastName = sqlDt.Rows[0]["LastName"].ToString();
-            //pendingAccount.email = sqlDt.Rows[0]["Email"].ToString();
-            //pendingAccount.requestDt = sqlDt.Rows[0]["RequestDt"].ToString();
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(employeeId));
 
-            // return pendingAccount;
+            try
+            {
+                conn.Open();
+
+                cmd.ExecuteNonQuery();
+
+                return "account denied success";
+            }
+            catch (Exception)
+            {
+                return "account denied failed";
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
         }
     }
 }
