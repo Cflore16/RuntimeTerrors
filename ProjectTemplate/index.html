@@ -125,7 +125,7 @@
                         if (currentLogon.adminFlag == true) {
                             document.getElementById('loginPage').style.display = "none";
                             debugger;
-                            showTab(event, 'adminHomePage');
+                            showTab(event, 'homePage2');
                         }
                         else {
                             document.getElementById('loginPage').style.display = "none";
@@ -188,8 +188,8 @@
                         //$("#requestsBox").empty();
                         //admin = false;
                         for (var i = 0; i < msg.d.length; i++) {
-                            req = "<li class='AccountList'> <a  href='' onclick='showTab(event, 'accountApprovalPage')' class='accountLA'>"
-                                + "EmployeeID: " + msg.d[i].employeeId + "    First Name: " + msg.d[i].firstName + "    Last Name: " + msg.d[i].lastName
+                            req = "<li class=\"accountList\"> <a href=\"javascript:showTab(event, 'accountApprovalPage');\" class=\"accountLA\" \"accountLA:hover\">"
+                                + "#" + "<strong>" + msg.d[i].employeeId + "</strong>" + " - " + msg.d[i].firstName + " " + msg.d[i].lastName
                                 + "</a></li>";                               
                             $("#pendingAccountRequestList").append(req);
                         }
@@ -860,6 +860,37 @@
                 <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverOrg whiteBut tallBut" onclick="showTab(event, 'viewRankingsPage')">View Rankings</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
+            <br><br><br>
+            <div class="row">
+                <div class="col-lg-08 col-md-07 col-sm-07 wht"></div>
+                <div class="col-lg-04 col-md-05 col-sm-05 cya"><button class="cya hoverCya" onclick="logout()">Log off</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="homePage2" class="tabContent">
+        <br>
+        <div class="AppBackground">
+            <br>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Home</h2></div>
+            </div>
+            <br><br><br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut tallBut" onclick="showTab(event, 'chooseDepartPage')">Create Feedback</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 blu"><button class="blu hoverBlu whiteBut tallBut" onclick="showTab(event, 'editProfilePage')">Edit Profile</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverOrg whiteBut tallBut" onclick="showTab(event, 'viewRankingsPage')">View Rankings</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut tallBut" onclick="showTab(event, 'adminHomePage')">Admin</button></div>
@@ -963,12 +994,12 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Admin Home</h2></div>
             </div>
             <br><br><br>
-                    <div class="row">
-                        <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                        <!--<div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut tallBut" onclick="showTab(event, 'accountsListPage')">Manage Users</button></div>-->
-                        <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut tallBut" onclick="LoadAccountRequests()">Manage Users</button></div>
-                        <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                    </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <!--<div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut tallBut" onclick="showTab(event, 'accountsListPage')">Manage Users</button></div>-->
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut tallBut" onclick="LoadAccountRequests()">Manage Users</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 blu"><button class="blu hoverBlu whiteBut tallBut" onclick="showTab(event, 'viewByDepartPage')">View Feedback</button></div>
