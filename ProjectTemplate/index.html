@@ -8,6 +8,9 @@
     <!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
     <script type="text/javascript">
 
+        //A global variable used to detect if the logged in user is admin or not
+        var globalAdminFlag = null;
+
         function TestButtonHandler() {
             var webMethod = "ProjectServices.asmx/TestConnection";
             var parameters = "{}";
@@ -63,7 +66,18 @@
             document.getElementById(tabName).style.display = "block";
             event.className += " active";
             // removed event.currentTarget.className
-        }        
+        }
+
+        function goToHome(adminFlag) {
+            if (adminFlag) {
+
+                showTab(event, 'homePage2');
+
+            }
+            else {
+                showTab(event, 'homePage');
+            }
+        }
 
         function LogonShowTab(event, tabName) {
 
@@ -88,11 +102,15 @@
 
                     if (currentLogon.success == true) {
                         if (currentLogon.adminFlag == true) {
+                            globalAdminFlag = true;
+
                             document.getElementById('loginPage').style.display = "none";
                              
                             showTab(event, 'homePage2');
                         }
                         else {
+                            globalAdminFlag = false;
+
                             document.getElementById('loginPage').style.display = "none";
                              
                             showTab(event, 'homePage');
@@ -138,6 +156,8 @@
                     window.location.reload();
                 }
             });
+
+            globalAdmingflag = null;
         }
 
         //Dispalys account request on accountsListPage
@@ -1046,7 +1066,7 @@
             <br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverorg whiteBut" onclick="showTab(event, 'homePage')">Go back</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverorg whiteBut" onclick="goToHome(globalAdminFlag)">Go back</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br>
@@ -1074,7 +1094,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverOrg whiteBut tallBut" onclick="showTab(event, 'homePage')">Go back</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverOrg whiteBut tallBut" onclick="goToHome(globalAdminFlag)">Go back</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br><br>
@@ -1212,7 +1232,7 @@
             <br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="showTab(event, 'homePage')">Go back</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="goToHome(globalAdminFlag)">Go back</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br><br>
@@ -1256,7 +1276,7 @@
             <br><br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="showTab(event, 'homePage')">Confirm</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="goToHome(globalAdminFlag)">Confirm</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br>
@@ -1372,7 +1392,7 @@
             <div class="row">
                 <div class="col-lg-04 col-md-05 col-sm-05 red"><button class="red hoverRed whiteBut" onclick="showTab(event, 'chooseDepartPage')">Back</button></div>
                 <div class="col-lg-04 col-md-02 col-sm-02 wht"></div>
-                <div class="col-lg-04 col-md-05 col-sm-05 blu"><button class="blu hoverBlu whiteBut" onclick="showTab(event, 'homePage')">Submit</button></div>
+                <div class="col-lg-04 col-md-05 col-sm-05 blu"><button class="blu hoverBlu whiteBut" onclick="goToHome(globalAdminFlag)">Submit</button></div>
             </div>
             <br>
         </div>
