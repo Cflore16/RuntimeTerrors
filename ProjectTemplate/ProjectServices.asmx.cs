@@ -347,5 +347,40 @@ namespace ProjectTemplate
                 }
             }
         }
+
+        [WebMethod(EnableSession = true)]
+        public string EditProfile(string employeeId, string password, string fName, string lName, string email)
+        {
+            string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            MySqlConnection conn = new MySqlConnection(connStr);
+            string sql = "UPDATE Account SET EmployeeId=@idValue, AcctPassword=@pwValue, FirstName=@fnValue, LastName=@lnValue, Email=@emValue WHERE EmployeeId=@idValue;";
+
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(employeeId));
+            cmd.Parameters.AddWithValue("@pwValue", HttpUtility.UrlDecode(password));
+            cmd.Parameters.AddWithValue("@fnValue", HttpUtility.UrlDecode(fName));
+            cmd.Parameters.AddWithValue("@lnValue", HttpUtility.UrlDecode(lName));
+            cmd.Parameters.AddWithValue("@emValue", HttpUtility.UrlDecode(email));
+
+            try
+            {
+                conn.Open();
+
+                cmd.ExecuteNonQuery();
+
+                return "edit profile success";
+            }
+            catch (Exception)
+            {
+                return "edit profile failed";
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
+        }
     }
 }

@@ -337,6 +337,41 @@
             });
         }
 
+        function EditAccount() {
+            var employeeIdValue = document.getElementById("editID").value;
+            var passwordValue = document.getElementById("editPW").value;
+            var firstNameValue = document.getElementById("editFN").value;
+            var lastNameValue = document.getElementById("editLN").value;
+            var emailValue = document.getElementById("editEM").value;
+
+            var webMethod = "ProjectServices.asmx/EditProfile";
+            var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\",\"password\":\"" + encodeURI(passwordValue) + "\",\"fName\":\"" + encodeURI(firstNameValue) + "\",\"lName\":\"" + encodeURI(lastNameValue) + "\",\"email\":\"" + encodeURI(emailValue) + "\"}";
+
+            console.log("\"employeeId\":\"" + encodeURI(employeeIdValue) + "\",\"password\":\"" + encodeURI(passwordValue) + "\",\"fName\":\"" + encodeURI(firstNameValue) + "\",\"lName\":\"" + encodeURI(lastNameValue) + "\",\"email\":\"" + encodeURI(emailValue) + "\"");
+
+            goToHome(globalAdminFlag);
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var editProfileMsg = msg.d;
+
+                    console.log(editProfileMsg);
+
+                },
+                error: function (e) {
+
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+
 
     </script>
     <!--END OF YOUR OWN JAVASCRIPT-->
@@ -1250,33 +1285,33 @@
             <br><br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" class="text" value="Employee ID" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Employee ID';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" id="EditID" class="text" value="" disabled></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input type="password" class="text" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input type="password" id="EditPW" class="text" value=""></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" class="text" value="First name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'First name';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" id="EditFN" class="text" value=""></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" class="text" value="Last name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Last Name';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" id="EditLN" class="text" value=""></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" class="text" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input type="text" id="EditEM" class="text" value=""></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="goToHome(globalAdminFlag)">Confirm</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="EditAccount()">Confirm</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br>
