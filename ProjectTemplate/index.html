@@ -10,6 +10,8 @@
 
         //A global variable used to detect if the logged in user is admin or not
         var globalAdminFlag = null;
+        //A global variable to store the current user's employeeId
+        var globalEmployeeId = null;
 
         function TestButtonHandler() {
             var webMethod = "ProjectServices.asmx/TestConnection";
@@ -101,7 +103,11 @@
                     // alert(responseFromServer);
 
                     if (currentLogon.success == true) {
+                        //set globalemployeeId
+                        globalEmployeeId = currentLogon.employeeId;
+
                         if (currentLogon.adminFlag == true) {
+                            //set global admin flag
                             globalAdminFlag = true;
 
                             document.getElementById('loginPage').style.display = "none";
@@ -109,6 +115,7 @@
                             showTab(event, 'homePage2');
                         }
                         else {
+                            //set global admin flag
                             globalAdminFlag = false;
 
                             document.getElementById('loginPage').style.display = "none";
@@ -157,7 +164,9 @@
                 }
             });
 
+            //clear global variables when logging off
             globalAdmingflag = null;
+            globalEmployeeId = null;
         }
 
         //Dispalys account request on accountsListPage
@@ -174,7 +183,7 @@
 
                     if (msg.d.length > 0) {
                         for (var i = 0; i < msg.d.length; i++) {
-                            req = "<li class=\"accountList\"> <a href=\"#\" class=\"accountLA\" \"accountLA:hover\" ID='" + msg.d[i].employeeId + "' onclick=\"showTab(event, 'accountApprovalPage'); LoadAccountDetail(this.id);\">"
+                            req = "<li class=\"accountList\"> <a href=\"#\" class=\"accountLA\" \"accountLA:hover\" ID='" + msg.d[i].employeeId + "' onclick=\"showTab(event, 'accountApprovalPage'); LoadAccountRequestDetail(this.id);\">"
                                 + "#" + "<strong>" + msg.d[i].employeeId + "</strong>" + " - " + msg.d[i].firstName + " " + msg.d[i].lastName
                                 + "</a></li>";                               
                             $("#pendingAccountRequestList").append(req);
@@ -197,14 +206,14 @@
             });
         }
 
-        function LoadAccountDetail(ID) {
+        function LoadAccountRequestDetail(ID) {
 
             console.log(ID);
              
             var employeeIdValue = ID;
              
 
-            var webMethod = "ProjectServices.asmx/GetAccountDetails";
+            var webMethod = "ProjectServices.asmx/GetAccountRequestDetails";
             var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
 
              
@@ -241,6 +250,57 @@
                 }
             });
         }
+
+        function LoadAccountEditDetail(employeeId) {
+
+            var employeeIdValue = employeeId;
+
+            var webMethod = "ProjectServices.asmx/GetAccount";
+            var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var accountDetail = msg.d;
+
+                    
+                    console.log(accountDetail);
+
+                    debugger;
+
+                    var id = document.getElementById("EditID");
+                    id.value = accountDetail.employeeId;
+
+                    var password = document.getElementById("EditPW");
+                    password.value = accountDetail.password;
+
+                    var fName = document.getElementById("EditFN");
+                    fName.value = accountDetail.firstName;
+                    
+                    var lName = document.getElementById("EditLN");
+                    lName.value = accountDetail.lastName;
+
+                    var email = document.getElementById("EditEM")
+                    email.value = accountDetail.email;
+
+                    debugger;
+                    
+                    showTab(event, 'editProfilePage')
+                },
+                error: function (e) {
+
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+
+
+
 
         function DenyAccount() {
             var employeeIdValue = document.getElementById("ArDetailEmployeeId").value;
@@ -338,11 +398,19 @@
         }
 
         function EditAccount() {
-            var employeeIdValue = document.getElementById("editID").value;
-            var passwordValue = document.getElementById("editPW").value;
-            var firstNameValue = document.getElementById("editFN").value;
-            var lastNameValue = document.getElementById("editLN").value;
-            var emailValue = document.getElementById("editEM").value;
+            debugger;
+
+            var employeeIdValue = document.getElementById("EditID").value;
+            debugger;
+            var passwordValue = document.getElementById("EditPW").value;
+            debugger;
+            var firstNameValue = document.getElementById("EditFN").value;
+            debugger;
+            var lastNameValue = document.getElementById("EditLN").value;
+            debugger;
+            var emailValue = document.getElementById("EditEM").value;
+
+            debugger;
 
             var webMethod = "ProjectServices.asmx/EditProfile";
             var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\",\"password\":\"" + encodeURI(passwordValue) + "\",\"fName\":\"" + encodeURI(firstNameValue) + "\",\"lName\":\"" + encodeURI(lastNameValue) + "\",\"email\":\"" + encodeURI(emailValue) + "\"}";
@@ -974,7 +1042,8 @@
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 blu"><button class="blu hoverBlu whiteBut tallBut" onclick="showTab(event, 'editProfilePage')">Edit Profile</button></div>
+                <!--<div class="col-lg-10 col-md-12 col-sm-12 blu"><button class="blu hoverBlu whiteBut tallBut" onclick="showTab(event, 'editProfilePage')">Edit Profile</button></div>-->
+                <div class="col-lg-10 col-md-12 col-sm-12 blu"><button class="blu hoverBlu whiteBut tallBut" onclick="LoadAccountEditDetail(globalEmployeeId)">Edit Profile</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">

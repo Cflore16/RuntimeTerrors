@@ -195,7 +195,7 @@ namespace ProjectTemplate
         }
 
         [WebMethod(EnableSession = true)]
-        public PendingAccountRequest GetAccountDetails(string employeeId)
+        public PendingAccountRequest GetAccountRequestDetails(string employeeId)
         {
             PendingAccountRequest pendingAccount = new PendingAccountRequest();
             
@@ -381,6 +381,62 @@ namespace ProjectTemplate
                     conn.Close();
                 }
             }
+        }
+        
+        [WebMethod(EnableSession = true)]
+        public Account GetAccount(string employeeId)
+        {
+            Account currentAccount = new Account();
+
+            //our connection string comes from our web.config file like we talked about earlier
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            //here's our query.  A basic select with nothing fancy.  Note the parameters that begin with @
+            // string sqlSelect = "SELECT employeeId, adminFlag FROM Account WHERE employeeId=@idValue and AcctPassword=@passValue";
+            string sql = "SELECT * FROM Account WHERE EmployeeId=@idValue";
+
+            //set up our connection object to be ready to use our connection string
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            sqlConnection.Open();
+
+
+            //set up our command object to use our connection, and our query
+            MySqlCommand sqlCommand = new MySqlCommand(sql, sqlConnection);
+
+            //tell our command to replace the @parameters with real values
+            //we decode them because they came to us via the web so they were encoded
+            //for transmission (funky characters escaped, mostly)
+            sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(employeeId));
+
+            try
+            {
+                MySqlDataReader dr;
+                dr = sqlCommand.ExecuteReader();
+                while (dr.Read())
+                {
+                    currentAccount.employeeId = dr.GetString("EmployeeID");
+                    currentAccount.password = dr.GetString("AcctPassword");
+                    currentAccount.firstName = dr.GetString("FirstName");
+                    currentAccount.lastName = dr.GetString("LastName");
+                    currentAccount.email = dr.GetString("Email");
+                    currentAccount.adminFlag = Convert.ToBoolean(dr.GetString("AdminFlag"));
+                    currentAccount.disableFlag = Convert.ToBoolean(dr.GetString("DisableFlag"));
+                    currentAccount.disableCount = Convert.ToInt32(dr.GetString("DisableCount"));
+                }
+                dr.Close();
+            }
+            catch (Exception)
+            {
+
+            }
+            finally
+            {
+                if (sqlConnection.State == ConnectionState.Open)
+                {
+                    sqlConnection.Close();
+                }
+            }
+
+            return currentAccount;
         }
     }
 }
