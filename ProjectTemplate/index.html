@@ -271,7 +271,7 @@
                     
                     console.log(accountDetail);
 
-                    debugger;
+                     
 
                     var id = document.getElementById("EditID");
                     id.value = accountDetail.employeeId;
@@ -288,7 +288,7 @@
                     var email = document.getElementById("EditEM")
                     email.value = accountDetail.email;
 
-                    debugger;
+                     
                     
                     showTab(event, 'editProfilePage')
                 },
@@ -398,19 +398,19 @@
         }
 
         function EditAccount() {
-            debugger;
+             
 
             var employeeIdValue = document.getElementById("EditID").value;
-            debugger;
+             
             var passwordValue = document.getElementById("EditPW").value;
-            debugger;
+             
             var firstNameValue = document.getElementById("EditFN").value;
-            debugger;
+             
             var lastNameValue = document.getElementById("EditLN").value;
-            debugger;
+             
             var emailValue = document.getElementById("EditEM").value;
 
-            debugger;
+             
 
             var webMethod = "ProjectServices.asmx/EditProfile";
             var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\",\"password\":\"" + encodeURI(passwordValue) + "\",\"fName\":\"" + encodeURI(firstNameValue) + "\",\"lName\":\"" + encodeURI(lastNameValue) + "\",\"email\":\"" + encodeURI(emailValue) + "\"}";
@@ -1074,7 +1074,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 blu"><button class="blu hoverBlu whiteBut tallBut" onclick="showTab(event, 'editProfilePage')">Edit Profile</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 blu"><button class="blu hoverBlu whiteBut tallBut" onclick="LoadAccountEditDetail(globalEmployeeId)">Edit Profile</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
