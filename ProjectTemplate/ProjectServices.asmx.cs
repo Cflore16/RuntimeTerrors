@@ -312,5 +312,40 @@ namespace ProjectTemplate
                 }
             }
         }
+
+        [WebMethod(EnableSession = true)]
+        public string AccountRequest(string employeeId, string password, string fName, string lName, string email)
+        {
+            string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            MySqlConnection conn = new MySqlConnection(connStr);
+            string sql = "INSERT INTO AccountRequest (EmployeeId, AcctPassword, FirstName, LastName, Email) VALUES (@idValue, @pwValue, @fnValue, @lnValue, @emValue);";
+
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(employeeId));
+            cmd.Parameters.AddWithValue("@pwValue", HttpUtility.UrlDecode(password));
+            cmd.Parameters.AddWithValue("@fnValue", HttpUtility.UrlDecode(fName));
+            cmd.Parameters.AddWithValue("@lnValue", HttpUtility.UrlDecode(lName));
+            cmd.Parameters.AddWithValue("@emValue", HttpUtility.UrlDecode(email));
+
+            try
+            {
+                conn.Open();
+
+                cmd.ExecuteNonQuery();
+
+                return "account request success";
+            }
+            catch (Exception)
+            {
+                return "account request failed";
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
+        }
     }
 }

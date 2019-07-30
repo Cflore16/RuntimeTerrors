@@ -282,49 +282,40 @@
             });
         }
 
-        //Function creates an user object
-        function createUser() {
-         
-            userID = getElementById("EID").value;
-            password = getElementById("PW").value;
-            firstName = getElementById("FN").value;
-            lastName = getElementById("LN").value;
-            email = getElementById("EM").value;
-            var user = new Object();
-            user.ID = userID;
-            user.pass = password;
-            user.first = firstName;
-            user.last = lastName;
-            user.mail = email;
-            //return the object
-            return user;
-        }
-        //function for the approve or deny request 
-        function decision() {
-            employee = createUser();
-            status = "A"
-            if (employee.ID == null || employee.ID == "Employee ID") {
-                alert("You must enter employee ID");
-                status = "D"
-            }
-            if (employee.pass == null || employee.pass == "Password") {
-                alert("You must enter a password");
-                status = "D"
-            }
-            if (employee.first == null || employee.first == "First name") {
-                alert("You must enter your first name");
-                status = "D"
-            }
-            if (employee.last == null || employee.last == "Last name") {
-                alert("You must enter your last name");
-                status = "D"
-            }
-            if (status == "A") {
+        function RquestAccount() {
+            var employeeIdValue = document.getElementById("EID").value;
+            var passwordValue = document.getElementById("PW").value;
+            var firstNameValue = document.getElementById("FN").value;
+            var lastNameValue = document.getElementById("LN").value;
+            var emailValue = document.getElementById("EM").value;
 
-            }
-            
-        }
+            var webMethod = "ProjectServices.asmx/AccountRequest";
+            var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\",\"password\":\"" + encodeURI(passwordValue) + "\",\"fName\":\"" + encodeURI(firstNameValue) + "\",\"lName\":\"" + encodeURI(lastNameValue) + "\",\"email\":\"" + encodeURI(emailValue) + "\"}";
 
+            console.log("\"employeeId\":\"" + encodeURI(employeeIdValue) + "\",\"password\":\"" + encodeURI(passwordValue) + "\",\"fName\":\"" + encodeURI(firstNameValue) + "\",\"lName\":\"" + encodeURI(lastNameValue) + "\",\"email\":\"" + encodeURI(emailValue) + "\"");
+
+            showTab(event, 'loginPage');
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var accountRequestMsg = msg.d;
+
+                    console.log(accountRequestMsg);
+
+                },
+                error: function (e) {
+
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
 
 
     </script>
@@ -1016,7 +1007,7 @@
             <br><br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="showTab(event, 'homePage')">Request Account</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="RquestAccount()">Request Account</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
