@@ -301,21 +301,10 @@
         }
         //function for the approve or deny request 
         function decision() {
-            var webMethod = "ProjectServices.asmx/approveOrDeny";
-            var employee = createUser();
-            var theID = String(employee.ID);
-            var status = "A"
-            
-            $.ajax({
-                type: "POST",
-                url: webMethod,
-                data theID,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (msg) {
-                    var responseFromServer = msg.d;
-                    if (employee.ID == null || employee.ID == "Employee ID") {
-              alert("You must enter employee ID");
+            employee = createUser();
+            status = "A"
+            if (employee.ID == null || employee.ID == "Employee ID") {
+                alert("You must enter employee ID");
                 status = "D"
             }
             if (employee.pass == null || employee.pass == "Password") {
@@ -330,58 +319,11 @@
                 alert("You must enter your last name");
                 status = "D"
             }
-
-                    if (status == "A" && responseFromServer == false) {
-                        var webMethod = "ProjectServices.asmx/insertWhenSuccess";
-                        string yourID = employee.ID;
-                        string yourPassword = employee.pass;
-                        string yourFirst = employee.first;
-                        string yourLast = employee.last;
-                        string yourEmail = employee.mail;
-                        $.ajax({
-                            type: "POST",
-                            url: webMethod,
-                            contentType: "application/json; charset=utf-8",
-                            dataType: "json",
-                            success: function (msg) {
-                                
-                            },
-                            error: function (e) {
-                                alert("Error communicating with the server.");
-                            }
-                        });
-                    }
-
-                    
-                },
-                error: function (e) {
-                    alert("Error communicating with the server.");
-                }
-            });
-            //employee = createUser();
-            //status = "A"
-            //if (employee.ID == null || employee.ID == "Employee ID") {
-              //  alert("You must enter employee ID");
-                //status = "D"
-            //}
-            //if (employee.pass == null || employee.pass == "Password") {
-              //  alert("You must enter a password");
-                //status = "D"
-            //}
-            //if (employee.first == null || employee.first == "First name") {
-              //  alert("You must enter your first name");
-                //status = "D"
-            //}
-            //if (employee.last == null || employee.last == "Last name") {
-              //  alert("You must enter your last name");
-                //status = "D"
-            //}
-
-            //if (status == "A") {
+            if (status == "A") {
 
             }
             
-        
+        }
 
 
 
