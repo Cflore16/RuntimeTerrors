@@ -438,5 +438,44 @@ namespace ProjectTemplate
 
             return currentAccount;
         }
+
+        [WebMethod(EnableSession = true)]
+        public Rankings ViewRankings(string test)
+        {
+            Rankings currentRankings  = new Rankings();
+
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+
+            string sql = "SELECT Department, COUNT(Department) AS 'numOfResp' ,CAST(AVG (FeedbackRating4) AS DECIMAL (12,2)) AS 'AvgRating'FROM Feedback GROUP BY Department ORDER BY 'numOfResp' DESC LIMIT 5;";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            sqlConnection.Open();
+
+            MySqlCommand sqlCommand = new MySqlCommand(sql, sqlConnection);
+
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            DataTable sqlDt = new DataTable();
+            sqlDa.Fill(sqlDt);
+
+            currentRankings.department1 = sqlDt.Rows[0]["Department"].ToString();
+            currentRankings.department2 = sqlDt.Rows[1]["Department"].ToString();
+            currentRankings.department3 = sqlDt.Rows[2]["Department"].ToString();
+            currentRankings.department4 = sqlDt.Rows[3]["Department"].ToString();
+            currentRankings.department5 = sqlDt.Rows[4]["Department"].ToString();
+
+            currentRankings.response1 = sqlDt.Rows[0]["numOfResp"].ToString();
+            currentRankings.response2 = sqlDt.Rows[1]["numOfResp"].ToString();
+            currentRankings.response3 = sqlDt.Rows[2]["numOfResp"].ToString();
+            currentRankings.response4 = sqlDt.Rows[3]["numOfResp"].ToString();
+            currentRankings.response5 = sqlDt.Rows[4]["numOfResp"].ToString();
+
+            currentRankings.rating1 = sqlDt.Rows[0]["avgRating"].ToString();
+            currentRankings.rating2 = sqlDt.Rows[1]["avgRating"].ToString();
+            currentRankings.rating3 = sqlDt.Rows[2]["avgRating"].ToString();
+            currentRankings.rating4 = sqlDt.Rows[3]["avgRating"].ToString();
+            currentRankings.rating5 = sqlDt.Rows[4]["avgRating"].ToString();
+
+            return currentRankings;
+        }
     }
 }

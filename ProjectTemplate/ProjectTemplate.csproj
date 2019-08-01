@@ -110,6 +110,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rankings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
