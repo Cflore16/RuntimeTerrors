@@ -457,29 +457,29 @@
 
                     console.log(currentRankings);
 
-                    var depOneH3 = document.getElementById("rankingsDep1-H3").value;
-                    var depTwoH3 = document.getElementById("rankingsDep2-H3").value;
-                    var depThreeH3 = document.getElementById("rankingsDep3-H3").value;
-                    var depFourH3 = document.getElementById("rankingsDep4-H3").value;
-                    var depFiveH3 = document.getElementById("rankingsDep5-H3").value;
+                    var depOneH3 = document.getElementById("rankingsDep13");
+                    var depTwoH3 = document.getElementById("rankingsDep23");
+                    var depThreeH3 = document.getElementById("rankingsDep33");
+                    var depFourH3 = document.getElementById("rankingsDep43");
+                    var depFiveH3 = document.getElementById("rankingsDep53");
 
-                    var depOneH4 = document.getElementById("rankingsDep1-H4").value;
-                    var depTwoH4 = document.getElementById("rankingsDep2-H4").value;
-                    var depThreeH4 = document.getElementById("rankingsDep3-H4").value;
-                    var depFourH4 = document.getElementById("rankingsDep4-H4").value;
-                    var depFiveH4 = document.getElementById("rankingsDep5-H4").value;
+                    var depOneH4 = document.getElementById("rankingsDep14");
+                    var depTwoH4 = document.getElementById("rankingsDep24");
+                    var depThreeH4 = document.getElementById("rankingsDep34");
+                    var depFourH4 = document.getElementById("rankingsDep44");
+                    var depFiveH4 = document.getElementById("rankingsDep54");
 
-                    depOneH3.value = "1. " + currentRankings.department1;
-                    depTwoH3.value = "2. " + currentRankings.department2;
-                    depThreeH3.value = "3. " + currentRankings.department3;
-                    depFourH3.value = "4. " + currentRankings.department4;
-                    depFiveH3.value = "4. " + currentRankings.department5;
+                    depOneH3.innerHTML = "1. " + currentRankings.department1;
+                    depTwoH3.innerHTML= "2. " + currentRankings.department2;
+                    depThreeH3.innerHTML = "3. " + currentRankings.department3;
+                    depFourH3.innerHTML = "4. " + currentRankings.department4;
+                    depFiveH3.innerHTML = "4. " + currentRankings.department5;
 
-                    depOneH4.value = currentRankings.rating1 + " rating - " + currentRankings.response1 + " responses";
-                    depTwoH4.value = currentRankings.rating2 + " rating - " + currentRankings.response2 + " responses";
-                    depThreeH4.value = currentRankings.rating3 + " rating - " + currentRankings.response3 + " responses";
-                    depFourH4.value = currentRankings.rating4 + " rating - " + currentRankings.response4 + " responses";
-                    depFiveH4.value = currentRankings.rating5 + " rating - " + currentRankings.response5 + " responses";
+                    depOneH4.innerHTML = currentRankings.rating1 + " rating - " + currentRankings.response1 + " responses";
+                    depTwoH4.innerHTML = currentRankings.rating2 + " rating - " + currentRankings.response2 + " responses";
+                    depThreeH4.innerHTML = currentRankings.rating3 + " rating - " + currentRankings.response3 + " responses";
+                    depFourH4.innerHTML= currentRankings.rating4 + " rating - " + currentRankings.response4 + " responses";
+                    depFiveH4.innerHTML = currentRankings.rating5 + " rating - " + currentRankings.response5 + " responses";
 
                     showTab(event, 'viewRankingsPage')
                                   
@@ -1359,29 +1359,29 @@
             <br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 gre"><h3 class="rankingFormat3" id="rankingsDep1-H3">1. Sales</h3><h4 class="rankingFormat4" id="rankingsDep1-H4">4.9 rating - 1,289 responses</h4></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><h3 class="rankingFormat3" id="rankingsDep13"></h3><h4 class="rankingFormat4" id="rankingsDep14"></h4></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
 
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 org"><h3 class="rankingFormat3" id="rankingsDep2-H3">2. IT</h3><h4 class="rankingFormat4" id="rankingsDep2-H4">4.2 rating - 1,091 responses</h4></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 org"><h3 class="rankingFormat3" id="rankingsDep23"></h3><h4 class="rankingFormat4" id="rankingsDep24"></h4></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
 
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 pur"><h3 class="rankingFormat3" id="rankingsDep3-H3">3. HR</h3><h4 class="rankingFormat4" id="rankingsDep3-H4">3.9 rating - 931 responses</h4></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 pur"><h3 class="rankingFormat3" id="rankingsDep33"></h3><h4 class="rankingFormat4" id="rankingsDep34"></h4></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 red"><h3 class="rankingFormat3" id="rankingsDep4-H3">4. Marketing</h3><h4 class="rankingFormat4" id="rankingsDep4-H4">3.2 rating - 866 responses</h4></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 red"><h3 class="rankingFormat3" id="rankingsDep43"></h3><h4 class="rankingFormat4" id="rankingsDep44"></h4></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 blu"><h3 class="rankingFormat3" id="rankingsDep5-H3">5. Accouting</h3><h4 class="rankingFormat4" id="rankingsDep5-H4">2.3 rating - 78 responses</h4></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 blu"><h3 class="rankingFormat3" id="rankingsDep53"></h3><h4 class="rankingFormat4" id="rankingsDep54"></h4></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br>

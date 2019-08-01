@@ -446,7 +446,7 @@ namespace ProjectTemplate
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
 
-            string sql = "SELECT Department, COUNT(Department) AS 'numOfResp' ,CAST(AVG (FeedbackRating4) AS DECIMAL (12,2)) AS 'AvgRating'FROM Feedback GROUP BY Department ORDER BY 'numOfResp' DESC LIMIT 5;";
+            string sql = "SELECT Department, COUNT(Department) AS 'numOfResp' ,CAST(AVG (FeedbackRating4) AS DECIMAL (12,2)) AS 'AvgRating'FROM Feedback GROUP BY Department ORDER BY count('numOfResp') DESC LIMIT 5;";
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             sqlConnection.Open();
