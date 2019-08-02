@@ -503,10 +503,8 @@ namespace ProjectTemplate
                     firstName = sqlDt.Rows[i]["FirstName"].ToString(),
                     lastName = sqlDt.Rows[i]["LastName"].ToString(),
                     email = sqlDt.Rows[i]["Email"].ToString(),
-                    //adminFlag = Convert.ToBoolean("AdminFlag"),
-                    //disableFlag = Convert.ToBoolean("DisableFlag"),
-                    //disableCount = Convert.ToInt32("DisableCount")
-            });
+                    
+                });
             }
             //convert the list of accounts to an array and return!
             return activeAccount.ToArray();
@@ -528,18 +526,29 @@ namespace ProjectTemplate
 
             sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(employeeId));
 
+            bool adminUser = false;
+
             try
             {
                 MySqlDataReader dr;
                 dr = sqlCommand.ExecuteReader();
                 while (dr.Read())
-                {
+                {            
                     accountDetails.employeeId = dr.GetString("EmployeeID");
                     accountDetails.password = dr.GetString("AcctPassword");
                     accountDetails.email = dr.GetString("Email");
                     accountDetails.firstName = dr.GetString("FirstName");
                     accountDetails.lastName = dr.GetString("LastName");
+                    accountDetails.adminFlag = adminUser;
+
                 }
+
+                if (dr.GetString("AdminFlag").ToUpper() == "X")
+                {
+                    adminUser = true;
+                    accountDetails.adminFlag = adminUser;
+                }
+
                 dr.Close();
             }
             catch (Exception)
@@ -614,9 +623,6 @@ namespace ProjectTemplate
                     firstName = sqlDt.Rows[i]["FirstName"].ToString(),
                     lastName = sqlDt.Rows[i]["LastName"].ToString(),
                     email = sqlDt.Rows[i]["Email"].ToString(),
-                    //adminFlag = Convert.ToBoolean("AdminFlag"),
-                    //disableFlag = Convert.ToBoolean("DisableFlag"),
-                    //disableCount = Convert.ToInt32("DisableCount")
                 });
             }
             //convert the list of accounts to an array and return!
@@ -684,11 +690,11 @@ namespace ProjectTemplate
 
                 cmd.ExecuteNonQuery();
 
-                return "edit profile success";
+                return "enable account success";
             }
             catch (Exception)
             {
-                return "edit profile failed";
+                return "enable account failed";
             }
             finally
             {

@@ -559,6 +559,15 @@
 
                     var email = document.getElementById("disableEmail")
                     email.value = accountRequestDetail.email;
+
+                    var makeAdmin = document.getElementById("adminAccountButton");
+
+                    if (accountRequestDetail.adminFlag == true) {
+                        makeAdmin.innerHTML = "Disable Admin";
+                    } else {
+                        makeAdmin.innerHTML = "Make Admin";
+                    }
+           
                 },
                 error: function (e) {
 
@@ -701,6 +710,16 @@
                     alert("this code will only execute if javascript is unable to access the webservice");
                 }
             });
+        }
+
+        function adminDecide() {
+            var makeAdmin = document.getElementById("adminAccountButton");
+
+            if (makeAdmin.innerHTML == "Make Admin") {
+                makeAdmin();
+            } else {
+                disableAdmin();
+            }
         }
 
     </script>
@@ -1573,7 +1592,7 @@
                 <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut" onclick="showTab(event, 'adminHomePage')">Go Back</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
-            <br><br><br>
+            <br><br>
         </div>
     </div>
 
@@ -1605,7 +1624,7 @@
                 <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut" onclick="showTab(event, 'adminHomePage')">Go Back</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
-            <br><br><br>
+            <br><br>
         </div>
     </div>
 
@@ -1730,7 +1749,7 @@
                 <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="goToHome(globalAdminFlag)">Go back</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
-            <br><br><br>
+            <br>
         </div>
         <br>
     </div>
@@ -1980,7 +1999,12 @@
             <br><br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="DisableAccount(); setTimeout( LoadActiveAccounts, 2000 )">Disable</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="DisableAccount(); setTimeout( LoadActiveAccounts, 2000 )">Disable Account</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut" id="adminAccountButton" onclick="makeAdmin(); setTimeout( LoadActiveAccounts, 2000 )">Make Admin</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
@@ -1988,7 +2012,7 @@
                 <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverorg whiteBut" onclick="showTab(event, 'activeAccountsPage')">Go Back</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
-            <br><br><br><br>
+            <br><br>
         </div>
     </div>
 
@@ -2030,10 +2054,10 @@
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverorg whiteBut" onclick="showTab(event, 'disableAccountsListPage')">Go Back</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverorg whiteBut" onclick="showTab(event, 'disableAccountListPage')">Go Back</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
-            <br><br><br><br>
+            <br><br>
         </div>
     </div>
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
