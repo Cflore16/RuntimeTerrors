@@ -477,5 +477,116 @@ namespace ProjectTemplate
 
             return currentRankings;
         }
+
+        [WebMethod(EnableSession = true)]
+        public Account[] GetActiveAccounts()
+        {//LOGIC: get all active accounts and return them!
+            DataTable sqlDt = new DataTable("activeAccounts");
+
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+
+            string sqlSelect = "SELECT * FROM runtime.Account where DisableFlag IS null;";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            sqlDa.Fill(sqlDt);
+
+            List<Account> activeAccount = new List<Account>();
+            for (int i = 0; i < sqlDt.Rows.Count; i++)
+            {
+                activeAccount.Add(new Account
+                {
+                    employeeId = sqlDt.Rows[i]["EmployeeId"].ToString(),
+                    password = sqlDt.Rows[i]["AcctPassword"].ToString(),
+                    firstName = sqlDt.Rows[i]["FirstName"].ToString(),
+                    lastName = sqlDt.Rows[i]["LastName"].ToString(),
+                    email = sqlDt.Rows[i]["Email"].ToString(),
+                    //adminFlag = Convert.ToBoolean("AdminFlag"),
+                    //disableFlag = Convert.ToBoolean("DisableFlag"),
+                    //disableCount = Convert.ToInt32("DisableCount")
+            });
+            }
+            //convert the list of accounts to an array and return!
+            return activeAccount.ToArray();
+        }
+
+        [WebMethod(EnableSession = true)]
+        public Account GetActiveAccountDetails(string employeeId)
+        {
+            Account accountDetails = new Account();
+
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+
+            string sql = "SELECT * FROM Account WHERE EmployeeId=@idValue";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            sqlConnection.Open();
+
+            MySqlCommand sqlCommand = new MySqlCommand(sql, sqlConnection);
+
+            sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(employeeId));
+
+            try
+            {
+                MySqlDataReader dr;
+                dr = sqlCommand.ExecuteReader();
+                while (dr.Read())
+                {
+                    accountDetails.employeeId = dr.GetString("EmployeeID");
+                    accountDetails.password = dr.GetString("AcctPassword");
+                    accountDetails.email = dr.GetString("Email");
+                    accountDetails.firstName = dr.GetString("FirstName");
+                    accountDetails.lastName = dr.GetString("LastName");
+                }
+                dr.Close();
+            }
+            catch (Exception)
+            {
+
+            }
+            finally
+            {
+                if (sqlConnection.State == ConnectionState.Open)
+                {
+                    sqlConnection.Close();
+                }
+            }
+
+            return accountDetails;
+        }
+
+        [WebMethod(EnableSession = true)]
+        public string DisableAccount(string employeeId, string disableFlag)
+        {
+            string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            MySqlConnection conn = new MySqlConnection(connStr);
+            string sql = "UPDATE Account SET DisableFlag=@dValue WHERE EmployeeId=@idValue;";
+
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(employeeId));
+            cmd.Parameters.AddWithValue("@dValue", HttpUtility.UrlDecode(disableFlag));
+
+            try
+            {
+                conn.Open();
+
+                cmd.ExecuteNonQuery();
+
+                return "edit profile success";
+            }
+            catch (Exception)
+            {
+                return "edit profile failed";
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
+        }
     }
 }

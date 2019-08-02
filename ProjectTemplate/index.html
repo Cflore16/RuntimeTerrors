@@ -491,6 +491,111 @@
             });
         }
 
+        function LoadActiveAccounts() {
+            document.getElementById("activeAccountList").innerHTML = "";
+
+            var webMethod = "ProjectServices.asmx/GetActiveAccounts";
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+
+                    console.log(msg);
+
+                    if (msg.d.length > 0) {
+                        for (var i = 0; i < msg.d.length; i++) {
+                            req = "<li class=\"accountList\"> <a href=\"#\" class=\"accountLA\" \"accountLA:hover\" ID='" + msg.d[i].employeeId + "' onclick=\"showTab(event, 'accountDisablePage'); LoadActiveAccountDetail(this.id);\">"
+                                + "#" + "<strong>" + msg.d[i].employeeId + "</strong>" + " - " + msg.d[i].firstName + " " + msg.d[i].lastName
+                                + "</a></li>";
+                            $("#activeAccountList").append(req);
+                        }
+
+
+
+                        document.getElementById('loginPage').style.display = "none";
+                        showTab(event, 'activeAccountsPage');
+                    }
+                },
+                error: function (e) {
+                    alert("Error communicating with the server.");
+                }
+            });
+        }
+
+        function LoadActiveAccountDetail(ID) {
+
+            console.log(ID);
+
+            var employeeIdValue = ID;
+
+
+            var webMethod = "ProjectServices.asmx/GetActiveAccountDetails";
+            var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
+
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var accountRequestDetail = msg.d;
+
+                    console.log(accountRequestDetail);
+
+                    var id = document.getElementById("disableEmployeeId");
+                    id.value = accountRequestDetail.employeeId;
+
+                    var fName = document.getElementById("disableFirstName");
+                    fName.value = accountRequestDetail.firstName;
+
+                    var lName = document.getElementById("disableLastName");
+                    lName.value = accountRequestDetail.lastName;
+
+
+                    var email = document.getElementById("disableEmail")
+                    email.value = accountRequestDetail.email;
+                },
+                error: function (e) {
+
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+
+        function DisableAccount() {
+            var employeeIdValue = document.getElementById("disableEmployeeId").value;
+
+            var webMethod = "ProjectServices.asmx/DisableAccount";
+            var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\", \"disableFlag\":\"" + "X" + "\"}";
+
+            console.log("web service id value: " + employeeIdValue);
+
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var disableAccountMsg = msg.d;
+
+                    console.log(disableAccountMsg);
+
+                },
+                error: function (e) {
+
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
 
     </script>
     <!--END OF YOUR OWN JAVASCRIPT-->
@@ -1238,18 +1343,22 @@
             <br><br><br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <!--<div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut tallBut" onclick="showTab(event, 'accountsListPage')">Manage Users</button></div>-->
-                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut tallBut" onclick="LoadAccountRequests()">Manage Users</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut tallBut" onclick="LoadActiveAccounts()">Active Accounts</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 blu"><button class="blu hoverBlu whiteBut tallBut" onclick="showTab(event, 'viewByDepartPage')">View Feedback</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 blu"><button class="blu hoverBlu whiteBut tallBut" onclick="LoadAccountRequests()">Pending Accounts</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverOrg whiteBut tallBut" onclick="goToHome(globalAdminFlag)">Go back</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverOrg whiteBut tallBut" onclick="showTab(event, 'viewByDepartPage')">View Feedback</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut tallBut" onclick="goToHome(globalAdminFlag)">Go back</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br><br>
@@ -1261,7 +1370,7 @@
         <div class="AppBackground">
             <br>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Accounts List</h2></div>
+                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Pending Accounts</h2></div>
             </div>
             <br><br>
             <div class="row">
@@ -1270,6 +1379,31 @@
                     <ul id="pendingAccountRequestList">
                         <!--<li class="accountList"><a onclick="showTab(event, 'accountApprovalPage')" class="accountLA">list accounts here</a></li>-->
                     </ul>
+                </div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut" onclick="showTab(event, 'adminHomePage')">Go Back</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <br><br><br>
+        </div>
+    </div>
+
+    <div id="activeAccountsPage" class="tabContent">
+        <br>
+        <div class="AppBackground">
+            <br>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Active Accounts</h2></div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gry scrollableDiv">
+                    <ul id="activeAccountList"></ul>
                 </div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
@@ -1561,11 +1695,11 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Account Approval</h2></div>
             </div>
             <br><br>
-                <div class="row">
-                    <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                    <div class="col-lg-10 col-md-12 col-sm-12"><input id="ArDetailEmployeeId" type="text" class="text" value=""></div>
-                    <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="ArDetailEmployeeId" type="text" class="text" value=""></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12"><input id="ArDetailFirstName" type="text" class="text" value=""></div>
@@ -1595,6 +1729,49 @@
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverorg whiteBut" onclick="showTab(event, 'accountsListPage')">Go Back</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <br><br><br><br>
+        </div>
+    </div>
+
+    <div id="accountDisablePage" class="tabContent">
+        <br>
+        <div class="AppBackground">
+            <br>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Account Approval</h2></div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="disableEmployeeId" type="text" class="text" value=""></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="disableFirstName" type="text" class="text" value=""></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="disableLastName" type="text" class="text" value=""></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="disableEmail" type="text" class="text" value=""></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="DisableAccount(); setTimeout( LoadActiveAccounts, 2000 )">Disable</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverorg whiteBut" onclick="showTab(event, 'activeAccountsPage')">Go Back</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br><br><br>
