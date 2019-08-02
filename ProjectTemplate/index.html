@@ -597,6 +597,112 @@
             });
         }
 
+        function LoadDisabledAccounts() {
+            document.getElementById("disableAccountList").innerHTML = "";
+
+            var webMethod = "ProjectServices.asmx/GetDisabledAccounts";
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+
+                    console.log(msg);
+
+                    if (msg.d.length > 0) {
+                        for (var i = 0; i < msg.d.length; i++) {
+                            req = "<li class=\"accountList\"> <a href=\"#\" class=\"accountLA\" \"accountLA:hover\" ID='" + msg.d[i].employeeId + "' onclick=\"showTab(event, 'accountEnablePage'); LoadDisabledAccountDetail(this.id);\">"
+                                + "#" + "<strong>" + msg.d[i].employeeId + "</strong>" + " - " + msg.d[i].firstName + " " + msg.d[i].lastName
+                                + "</a></li>";
+                            $("#disableAccountList").append(req);
+                        }
+
+
+
+                        document.getElementById('loginPage').style.display = "none";
+                        showTab(event, 'disableAccountListPage');
+                    }
+                },
+                error: function (e) {
+                    alert("Error communicating with the server.");
+                }
+            });
+        }
+
+        function LoadDisabledAccountDetail(ID) {
+
+            console.log(ID);
+
+            var employeeIdValue = ID;
+
+
+            var webMethod = "ProjectServices.asmx/GetDisabledAccountDetails";
+            var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
+
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var accountRequestDetail = msg.d;
+
+                    console.log(accountRequestDetail);
+
+                    var id = document.getElementById("enableEmployeeId");
+                    id.value = accountRequestDetail.employeeId;
+
+                    var fName = document.getElementById("enableFirstName");
+                    fName.value = accountRequestDetail.firstName;
+
+                    var lName = document.getElementById("enableLastName");
+                    lName.value = accountRequestDetail.lastName;
+
+
+                    var email = document.getElementById("enableEmail")
+                    email.value = accountRequestDetail.email;
+                },
+                error: function (e) {
+
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+
+        function EnableAccount() {
+            var employeeIdValue = document.getElementById("enableEmployeeId").value;
+
+            var webMethod = "ProjectServices.asmx/EnableAccount";
+            var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
+
+            console.log("web service id value: " + employeeIdValue);
+
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var enableAccountMsg = msg.d;
+
+                    console.log(enableAccountMsg);
+
+                },
+                error: function (e) {
+
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+
     </script>
     <!--END OF YOUR OWN JAVASCRIPT-->
 
@@ -930,6 +1036,8 @@
 
         .boldbutton {
             font-weight: 900;
+            padding-top: 10%;
+            padding-bottom: 10%;
         }
 
         input[type="text"], input[type="password"] {
@@ -1088,6 +1196,16 @@
                 cursor: pointer;
             }
 
+        .accountD {
+            color: navy;
+            text-decoration: none;
+        }
+
+            .accountD:hover {
+                color: white;
+                cursor: pointer;
+            }
+
         .head {
             margin-left: auto;
             margin-right: auto;
@@ -1141,6 +1259,19 @@
             margin-top: 1%;
             margin-bottom: 2%;
         }
+
+        .customH2 {
+            margin-bottom: 0;
+        }
+
+        .customH4 {
+            color: navy;
+            text-align: center;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 0;
+            margin-bottom: 2%;
+        }
     </style>
     <!--END OF YOUR OWN CSS-->
 </head>
@@ -1153,7 +1284,9 @@
                 <img src="img/user.png" alt="" />
             </div>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht transBut"><h2>Feedback</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht transBut"><h2>Feedback</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
@@ -1188,7 +1321,9 @@
         <div class="AppBackground">
             <br>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Home</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Home</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br><br>
             <div class="row">
@@ -1220,7 +1355,9 @@
         <div class="AppBackground">
             <br>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Home</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Home</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br><br>
             <div class="row">
@@ -1256,7 +1393,9 @@
         <div class="AppBackground">
             <br>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Request Account</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Request Account</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br>
             <div class="row">
@@ -1304,24 +1443,34 @@
         <div class="AppBackground">
             <br>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Choose Department</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Choose Department</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br>
             <div class="row">
-                <div class="col-lg-06 col-md-06 col-sm-06 pblu"><button class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackPage')"><br><br>Sales<br><br></button></div>
-                <div class="col-lg-06 col-md-06 col-sm-06 pgre"><button class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackPage')"><br><br>HR<br><br></button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackPage')">Sales</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackPage')">HR</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
-                <div class="col-lg-06 col-md-06 col-sm-06 porg"><button class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackPage')"><br><br>IT<br><br></button></div>
-                <div class="col-lg-06 col-md-06 col-sm-06 pred"><button class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackPage')"><br><br>Marketing<br><br></button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackPage')">IT</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackPage')">Marketing</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
-                <div class="col-lg-06 col-md-06 col-sm-06 pblu"><button class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackPage')"><br><br>Accounting<br><br></button></div>
-                <div class="col-lg-06 col-md-06 col-sm-06 pgre"><button class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackPage')"><br><br>Service<br><br></button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackPage')">Accounting</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackPage')">Service</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
-                <div class="col-lg-06 col-md-06 col-sm-06 porg"><button class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackPage')"><br><br>Operations<br><br></button></div>
-                <div class="col-lg-06 col-md-06 col-sm-06 pred"><button class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackPage')"><br><br>Distribution<br><br></button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackPage')">Operations</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackPage')">Distribution</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br>
             <div class="row">
@@ -1338,7 +1487,9 @@
         <div class="AppBackground">
             <br>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Admin Home</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Admin Home</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br><br>
             <div class="row">
@@ -1370,7 +1521,9 @@
         <div class="AppBackground">
             <br>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Pending Accounts</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Pending Accounts</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br>
             <div class="row">
@@ -1397,7 +1550,9 @@
         <div class="AppBackground">
             <br>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Active Accounts</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Active Accounts</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br>
             <div class="row">
@@ -1408,6 +1563,43 @@
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverOrg whiteBut" onclick="setTimeout(LoadDisabledAccounts(),1000)">View Disabled Accounts</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut" onclick="showTab(event, 'adminHomePage')">Go Back</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <br><br><br>
+        </div>
+    </div>
+
+    <div id="disableAccountListPage" class="tabContent">
+        <br>
+        <div class="AppBackground">
+            <br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Disabled Accounts</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gry scrollableDiv">
+                    <ul id="disableAccountList"></ul>
+                </div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverOrg whiteBut" onclick="setTimeout(LoadActiveAccounts(), 1000)">View Enabled Accounts</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut" onclick="showTab(event, 'adminHomePage')">Go Back</button></div>
@@ -1422,24 +1614,34 @@
         <div class="AppBackground">
             <br>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>View by Department</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>View by Department</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br>
             <div class="row">
-                <div class="col-lg-06 col-md-06 col-sm-06 pblu"><button class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackListPage')"><br><br>Sales<br><br></button></div>
-                <div class="col-lg-06 col-md-06 col-sm-06 pgre"><button class="pgre boldbutton hoverPGre" oonclick="showTab(event, 'feedbackListPage')"><br><br>HR<br><br></button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackListPage')">Sales</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button class="pgre boldbutton hoverPGre" oonclick="showTab(event, 'feedbackListPage')">HR</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
-                <div class="col-lg-06 col-md-06 col-sm-06 porg"><button class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackListPage')"><br><br>IT<br><br></button></div>
-                <div class="col-lg-06 col-md-06 col-sm-06 pred"><button class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackListPage')"><br><br>Marketing<br><br></button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackListPage')">IT</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackListPage')">Marketing</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
-                <div class="col-lg-06 col-md-06 col-sm-06 pblu"><button class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackListPage')"><br><br>Accounting<br><br></button></div>
-                <div class="col-lg-06 col-md-06 col-sm-06 pgre"><button class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackListPage')"><br><br>Service<br><br></button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackListPage')">Accounting</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackListPage')">Service</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
-                <div class="col-lg-06 col-md-06 col-sm-06 porg"><button class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackListPage')"><br><br>Operations<br><br></button></div>
-                <div class="col-lg-06 col-md-06 col-sm-06 pred"><button class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackListPage')"><br><br>Distribution<br><br></button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackListPage')">Operations</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackListPage')">Distribution</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
@@ -1451,7 +1653,7 @@
                 <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut" onclick="showTab(event, 'adminHomePage')">Go back</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
-            <br><br><br>
+            <br>
         </div>
         <br>
     </div>
@@ -1461,7 +1663,9 @@
         <div class="AppBackground">
             <br>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Feedback List</h2><h3>(filter)</h3></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Feedback List</h2><h3 id="filteredCategory">(filtered by)</h3></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br>
             <div class="row">
@@ -1488,7 +1692,9 @@
         <div class="AppBackground">
             <br>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Rankings</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Rankings</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br>
             <div class="row">
@@ -1534,7 +1740,9 @@
         <div class="AppBackground">
             <br>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Edit Profile</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Edit Profile</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br>
             <div class="row">
@@ -1577,7 +1785,9 @@
         <div class="AppBackground">
             <br>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Anonymous Feedback</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Anonymous Feedback</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br>
             <div class="row">
@@ -1692,7 +1902,9 @@
         <div class="AppBackground">
             <br>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Account Approval</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Account Approval</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br>
             <div class="row">
@@ -1740,7 +1952,9 @@
         <div class="AppBackground">
             <br>
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 wht titleHeader"><h2>Account Approval</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Disable Account</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br>
             <div class="row">
@@ -1772,6 +1986,51 @@
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverorg whiteBut" onclick="showTab(event, 'activeAccountsPage')">Go Back</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <br><br><br><br>
+        </div>
+    </div>
+
+    <div id="accountEnablePage" class="tabContent">
+        <br>
+        <div class="AppBackground">
+            <br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Enable Account</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="enableEmployeeId" type="text" class="text" value=""></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="enableFirstName" type="text" class="text" value=""></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="enableLastName" type="text" class="text" value=""></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><input id="enableEmail" type="text" class="text" value=""></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="EnableAccount(); setTimeout( LoadDisabledAccounts, 2000 )">Enable</button></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 org"><button class="org hoverorg whiteBut" onclick="showTab(event, 'disableAccountsListPage')">Go Back</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br><br><br>
