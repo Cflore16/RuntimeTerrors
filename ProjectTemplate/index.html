@@ -713,13 +713,73 @@
         }
 
         function adminDecide() {
-            var makeAdmin = document.getElementById("adminAccountButton");
+            var checkAdmin = document.getElementById("adminAccountButton");
 
-            if (makeAdmin.innerHTML == "Make Admin") {
+            if (checkAdmin.innerHTML == "Make Admin") {
                 makeAdmin();
             } else {
                 disableAdmin();
             }
+        }
+
+        function disableAdmin() {
+            var employeeIdValue = document.getElementById("enableEmployeeId").value;
+
+            var webMethod = "ProjectServices.asmx/DisableAdmin";
+            var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
+
+            console.log("web service id value: " + employeeIdValue);
+
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var enableAccountMsg = msg.d;
+
+                    console.log(enableAccountMsg);
+
+                },
+                error: function (e) {
+
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+        }
+
+        function makeAdmin() {
+            var employeeIdValue = document.getElementById("disableEmployeeId").value;
+
+            var webMethod = "ProjectServices.asmx/MakeAdmin";
+            var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\", \"enableFlag\":\"" + "X" + "\"}";
+
+            console.log("web service id value: " + employeeIdValue);
+
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var disableAccountMsg = msg.d;
+
+                    console.log(disableAccountMsg);
+
+                },
+                error: function (e) {
+
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
         }
 
     </script>
@@ -814,7 +874,7 @@
         /* For medium screens (e.g. landscape phones and portrait tablets) */
         @media only screen and (min-width: 500px) {
             .col-md-00 {
-                /* display: none; */
+                display: none;
             }
 
             .col-md-01 {
@@ -893,7 +953,7 @@
         }
 
         /* For large screens or landscape tablets*/
-        @media only screen and (min-width: 1024px) {
+        @media only screen and (min-width: 800px) {
             .col-md-00 {
                 display: initial;
             }
@@ -1071,9 +1131,9 @@
             border-radius: 4px;
         }
 
-            input[type="text"]:hover, input[type="password"]:hover {
+            /*input[type="text"]:hover, input[type="password"]:hover {
                 border: 1px solid #949494;
-            }
+            }*/
 
         .hoverPBlu:hover {
             color: #75c0fa;
@@ -1662,6 +1722,7 @@
                 <div class="col-lg-05 col-md-06 col-sm-06 pred"><button class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackListPage')">Distribution</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
+            <br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="showTab(event, 'feedbackListPage')">View all</button></div>
@@ -1949,12 +2010,12 @@
             <br><br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="ApproveAccount(); setTimeout( LoadAccountRequests, 2000 )">Approve</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="ApproveAccount(); setTimeout( LoadAccountRequests, 1000 )">Approve</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut" onclick="DenyAccount(); setTimeout( LoadAccountRequests, 2000 )">Deny</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut" onclick="DenyAccount(); setTimeout( LoadAccountRequests, 1000 )">Deny</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
@@ -1999,12 +2060,12 @@
             <br><br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="DisableAccount(); setTimeout( LoadActiveAccounts, 2000 )">Disable Account</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="DisableAccount(); setTimeout( LoadActiveAccounts, 1000 )">Disable Account</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut" id="adminAccountButton" onclick="makeAdmin(); setTimeout( LoadActiveAccounts, 2000 )">Make Admin</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut" id="adminAccountButton" onclick="adminDecide(); setTimeout( LoadActiveAccounts, 1000 )">Make Admin</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
@@ -2049,7 +2110,7 @@
             <br><br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="EnableAccount(); setTimeout( LoadDisabledAccounts, 2000 )">Enable</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="EnableAccount(); setTimeout( LoadDisabledAccounts, 1000 )">Enable</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">

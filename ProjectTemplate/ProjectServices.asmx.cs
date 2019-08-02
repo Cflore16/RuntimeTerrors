@@ -583,11 +583,11 @@ namespace ProjectTemplate
 
                 cmd.ExecuteNonQuery();
 
-                return "edit profile success";
+                return "disable success";
             }
             catch (Exception)
             {
-                return "edit profile failed";
+                return "disable failed";
             }
             finally
             {
@@ -695,6 +695,69 @@ namespace ProjectTemplate
             catch (Exception)
             {
                 return "enable account failed";
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        public string DisableAdmin(string employeeId)
+        {
+            string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            MySqlConnection conn = new MySqlConnection(connStr);
+            string sql = "UPDATE Account SET AdminFlag=NULL WHERE EmployeeId=@idValue;";
+
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(employeeId));
+
+            try
+            {
+                conn.Open();
+
+                cmd.ExecuteNonQuery();
+
+                return "disable admin success";
+            }
+            catch (Exception)
+            {
+                return "disable failed";
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
+        }
+
+        [WebMethod(EnableSession = true)]
+        public string MakeAdmin(string employeeId, string enableFlag)
+        {
+            string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            MySqlConnection conn = new MySqlConnection(connStr);
+            string sql = "UPDATE Account SET AdminFlag=@dValue WHERE EmployeeId=@idValue;";
+
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(employeeId));
+            cmd.Parameters.AddWithValue("@dValue", HttpUtility.UrlDecode(enableFlag));
+
+            try
+            {
+                conn.Open();
+
+                cmd.ExecuteNonQuery();
+
+                return "enable admin success";
+            }
+            catch (Exception)
+            {
+                return "enable admin failed";
             }
             finally
             {
