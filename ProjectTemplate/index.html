@@ -206,6 +206,110 @@
             });
         }
 
+        //Dispalys all feedback on feedback list page
+        function LoadAllFeedback() {
+            document.getElementById("allFeedbackList").innerHTML = "";
+
+            var webMethod = "ProjectServices.asmx/GetAllFeedback";
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+
+
+                    if (msg.d.length > 0) {
+
+                        for (var i = 0; i < msg.d.length; i++) {
+                            feedbackItem =
+                                "<li class='allFeedbackLI'> <a href='#' class='allFeedbackAnchor' id='" + msg.d[i].feedbackRecordId + "' onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(this.id);\">"
+                            + "<strong>" + msg.d[i].department + ": </strong> Overall Rating: " + msg.d[i].overallRating + " - " + msg.d[i].feedbackDate
+                                + "</a></li>";
+
+
+                                //"<li class='allFeedbackLI' <a class='allFeedbackAnchor' id='" + msg.d[i].feedbackRecordId + "' onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(this.id);\">"
+                                //+ "<strong>Department: </strong>" + msg.d[i].department + " - <strong>Overall Rating: </strong>" + msg.d[i].overallRating + " - <strong>Date: </strong>" + msg.d[i].feedbackDate
+                                //+ "</a></li>";
+
+
+
+
+                                //"<li class=\"feedback\"> <a href=\"#\" class=\"accountLA\" \"accountLA:hover\" ID='" + msg.d[i].employeeId + "' onclick=\"showTab(event, 'accountApprovalPage'); LoadAccountRequestDetail(this.id);\">"
+                                //+ "#" + "<strong>" + msg.d[i].employeeId + "</strong>" + " - " + msg.d[i].firstName + " " + msg.d[i].lastName
+                                //+ "</a></li>";
+
+
+
+                            $("#allFeedbackList").append(feedbackItem);
+
+
+                            feedbackElems = document.getElementsByClassName("allFeedbackAnchor");
+                            for (j = 0; j < feedbackElems.length; j++) {
+                                feedbackElems[j].Id = msg.d[i].feedbackRecordId;
+                            }
+                        }
+
+
+
+                        document.getElementById('loginPage').style.display = "none";
+                        showTab(event, 'feedbackListPage');
+                    }
+                },
+                error: function (e) {
+                    alert("Error communicating with the server.");
+                }
+            });
+        }
+
+        //Dispalys feedback detail on feedback details page
+        function LoadFeedbackDetail(recordIdValue) {
+
+            var webMethod = "ProjectServices.asmx/GetFeedbackDetail";
+            //should maybe be recordIdValue?
+            var parameters = "{\"recordIdValue\":\"" + encodeURI(recordIdValue) + "\"}";
+
+
+
+
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                                       
+                    var feedbackDetail = msg.d;
+
+                    feedbackHeader = document.getElementById("feedbackDetailHeader");
+                    question1 = document.getElementById("viewDetailQ1");
+                    question2 = document.getElementById("viewDetailQ2");
+                    question3 = document.getElementById("viewDetailQ3");
+                    question4 = document.getElementById("viewDetailQ4");
+
+                    question1.disabled = true;
+                    question2.disabled = true;
+                    question3.disabled = true;
+                    question4.disabled = true;
+
+
+                    feedbackHeader.innerHTML = "Anonymous Feedback for " + feedbackDetail.department;
+                    question1.innerHTML = feedbackDetail.feedbackText1;
+                    question2.innerHTML = feedbackDetail.feedbackText2;
+                    question3.innerHTML = feedbackDetail.feedbackText3;
+                    question4.innerHTML = feedbackDetail.feedbackText4;                        
+
+                    document.getElementById('loginPage').style.display = "none";
+                    showTab(event, 'feedbackDetailPage');
+
+                },
+                error: function (e) {
+                    alert("Error communicating with the server.");
+                }
+            });
+        }
+
         function LoadAccountRequestDetail(ID) {
 
             console.log(ID);
@@ -298,9 +402,6 @@
                 }
             });
         }
-
-
-
 
         function DenyAccount() {
             var employeeIdValue = document.getElementById("ArDetailEmployeeId").value;
@@ -781,6 +882,7 @@
                 }
             });
         }
+
         //Function which will store employee's feedback 
         function InsertFeedback() {
             var q1value = getElementById("Q1").value;
@@ -1417,6 +1519,7 @@
         }
     </style>
     <!--END OF YOUR OWN CSS-->
+
 </head>
 <body>
     <div id="loginPage">
@@ -1789,7 +1892,7 @@
             <br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="showTab(event, 'feedbackListPage')">View all</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="LoadAllFeedback()">View all</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
@@ -1812,10 +1915,10 @@
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br>
-            <div class="row">
+            <div id="allFeedbackContainer" class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 gry">
-                    <ul>
+                    <ul id="allFeedbackList" style="list-style-type:none;">
                         <li class="accountList"><a href="#" class="accountLA">Sales: (sample feedback)</a></li>
                     </ul>
                 </div>
@@ -2037,6 +2140,125 @@
                 <div class="col-lg-04 col-md-02 col-sm-02 wht"></div>
                 <div class="col-lg-04 col-md-05 col-sm-05 blu"><button class="blu hoverBlu whiteBut" onclick="goToHome(globalAdminFlag)">Submit</button></div>
             </div>
+            <br>
+        </div>
+    </div>
+
+    <div id="feedbackDetailPage" class="tabContent">
+        <br>
+        <div class="AppBackground">
+            <br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2 id="feedbackDetailHeader">Anonymous Feedback</h2></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><span class="questionSpan">How do you feel about your job?</span></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><textarea id="viewDetailQ1" name="Text1" cols="40" rows="5"></textarea></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 rating">
+                    <div class="star-cb-group">
+                        <input type="radio" id="rating-5a" name="rating1" value="5" /><label for="rating-5a"></label>
+                        <input type="radio" id="rating-4a" name="rating1" value="4" /><label for="rating-4a"></label>
+                        <input type="radio" id="rating-3a" name="rating1" value="3" /><label for="rating-3a"></label>
+                        <input type="radio" id="rating-2a" name="rating1" value="2" /><label for="rating-2a"></label>
+                        <input type="radio" id="rating-1a" name="rating1" value="1" /><label for="rating-1a"></label>
+                    </div>
+                </div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><span class="questionSpan">What would help you do your job better?</span></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><textarea id="viewDetailQ2" name="Text1" cols="40" rows="5"></textarea></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 rating">
+                    <div class="star-cb-group">
+                        <input type="radio" id="rating-5b" name="rating2" value="5" /><label for="rating-5b"></label>
+                        <input type="radio" id="rating-4b" name="rating2" value="4" /><label for="rating-4b"></label>
+                        <input type="radio" id="rating-3b" name="rating2" value="3" /><label for="rating-3b"></label>
+                        <input type="radio" id="rating-2b" name="rating2" value="2" /><label for="rating-2b"></label>
+                        <input type="radio" id="rating-1b" name="rating2" value="1" /><label for="rating-1b"></label>
+                    </div>
+                </div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><span class="questionSpan">What things get in the way of your job?</span></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><textarea id="viewDetailQ3" name="Text1" cols="40" rows="5"></textarea></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 rating">
+                    <div class="star-cb-group">
+                        <input type="radio" id="rating-5c" name="rating3" value="5" /><label for="rating-5c"></label>
+                        <input type="radio" id="rating-4c" name="rating3" value="4" /><label for="rating-4c"></label>
+                        <input type="radio" id="rating-3c" name="rating3" value="3" /><label for="rating-3c"></label>
+                        <input type="radio" id="rating-2c" name="rating3" value="2" /><label for="rating-2c"></label>
+                        <input type="radio" id="rating-1c" name="rating3" value="1" /><label for="rating-1c"></label>
+                    </div>
+                </div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><span class="questionSpan">Free response - overall satisfaction</span></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><textarea id="viewDetailQ4" name="Text1" cols="40" rows="5"></textarea></div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 rating">
+                    <div class="star-cb-group">
+                        <input type="radio" id="rating-5d" name="rating4" value="5" /><label for="rating-5d"></label>
+                        <input type="radio" id="rating-4d" name="rating4" value="4" /><label for="rating-4d"></label>
+                        <input type="radio" id="rating-3d" name="rating4" value="3" /><label for="rating-3d"></label>
+                        <input type="radio" id="rating-2d" name="rating4" value="2" /><label for="rating-2d"></label>
+                        <input type="radio" id="rating-1d" name="rating4" value="1" /><label for="rating-1d"></label>
+                    </div>
+                </div>
+                <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+            </div>
+            <br><br>
+                <div class="row">
+                    <div class="row">
+                        <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                        <div class="col-lg-10 col-md-12 col-sm-12 red"><button class="red hoverRed whiteBut" onclick="showTab(event, 'feedbackListPage')">Go Back</button></div>
+                        <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
+                    </div>
+                </div>
             <br>
         </div>
     </div>
