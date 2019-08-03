@@ -169,7 +169,7 @@ namespace ProjectTemplate
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
             
-            string sqlSelect = "SELECT EmployeeId, AcctPassword, FirstName, LastName, Email, RequestDt FROM runtime.AccountRequest WHERE AccountApproval IS NULL order by RequestDt";
+            string sqlSelect = "SELECT EmployeeId, AcctPassword, FirstName, LastName, Email, RequestDt FROM runtime.AccountRequest WHERE AccountApproval IS NULL ORDER BY RequestDt";
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -767,6 +767,7 @@ namespace ProjectTemplate
                 }
             }
         }
+
         [WebMethod(EnableSession = true)]
         public string InsertFeedBack(string EmployeeId,string department, string FB1,string FBR1, string FB2,string FBR2,string FB3,string FBR3,string FB4,string FBR4)
         {
@@ -811,5 +812,87 @@ namespace ProjectTemplate
             }
         }
 
+        [WebMethod(EnableSession = true)]
+        public Feedback[] GetAllFeedback()
+        {//LOGIC: get all account requests and return them!
+            DataTable sqlDt = new DataTable("allFeedback");
+
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+
+            string sqlSelect = "SELECT *, CAST(FeedbackDate AS DATE) 'FeedbackDate2', CAST((FeedbackRating1 + FeedbackRating2 + FeedbackRating3 + FeedbackRating4)/4 AS DECIMAL(3,2)) 'OverallRating' FROM runtime.Feedback ORDER BY FeedbackDate DESC";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            sqlDa.Fill(sqlDt);
+
+            List<Feedback> allFeedback = new List<Feedback>();
+            for (int i = 0; i < sqlDt.Rows.Count; i++)
+            {
+                string dateFormatter = sqlDt.Rows[i]["FeedbackDate2"].ToString();
+                string[] dateFormatterSplit = dateFormatter.Split(Convert.ToChar(" "));
+
+                allFeedback.Add(new Feedback
+                {
+                    feedbackRecordId = Convert.ToInt32(sqlDt.Rows[i]["RecordId"]),
+                    employeeId = sqlDt.Rows[i]["EmployeeId"].ToString(),                    
+                    feedbackDate = dateFormatterSplit[0],
+                    department = sqlDt.Rows[i]["Department"].ToString(),
+                    feedbackText1 = sqlDt.Rows[i]["FeedbackText1"].ToString(),
+                    feedbackRating1 = Convert.ToInt32(sqlDt.Rows[i]["FeedbackRating1"]),
+                    feedbackText2 = sqlDt.Rows[i]["FeedbackText2"].ToString(),
+                    feedbackRating2 = Convert.ToInt32(sqlDt.Rows[i]["FeedbackRating2"]),
+                    feedbackText3 = sqlDt.Rows[i]["FeedbackText3"].ToString(),
+                    feedbackRating3 = Convert.ToInt32(sqlDt.Rows[i]["FeedbackRating3"]),
+                    feedbackText4 = sqlDt.Rows[i]["FeedbackText4"].ToString(),
+                    feedbackRating4 = Convert.ToInt32(sqlDt.Rows[i]["FeedbackRating4"]),
+                    overallRating = Convert.ToDouble(sqlDt.Rows[i]["OverallRating"])
+                });
+            }
+            //convert the list of accounts to an array and return!
+            return allFeedback.ToArray();
+        }
+
+
+        [WebMethod(EnableSession = true)]
+        public Feedback GetFeedbackDetail(string recordIdValue)
+        {
+            DataTable sqlDt = new DataTable("allFeedback");
+
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+
+            string sqlSelect = "SELECT *, CAST(FeedbackDate AS DATE) 'FeedbackDate2', CAST((FeedbackRating1 + FeedbackRating2 + FeedbackRating3 + FeedbackRating4)/4 AS DECIMAL(3,2)) 'OverallRating' FROM runtime.Feedback WHERE RecordId = @RecordId ORDER BY FeedbackDate DESC;";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+
+            sqlCommand.Parameters.AddWithValue("@recordId", HttpUtility.UrlDecode(recordIdValue));
+
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            sqlDa.Fill(sqlDt);
+
+            Feedback feedbackDetail = new Feedback();
+
+            string dateFormatter = sqlDt.Rows[0]["FeedbackDate2"].ToString();
+            string[] dateFormatterSplit = dateFormatter.Split(Convert.ToChar(" "));
+
+            feedbackDetail.feedbackRecordId = Convert.ToInt32(sqlDt.Rows[0]["RecordId"]);
+            feedbackDetail.employeeId = sqlDt.Rows[0]["EmployeeId"].ToString();
+            feedbackDetail.feedbackDate = dateFormatterSplit[0];
+            feedbackDetail.department = sqlDt.Rows[0]["Department"].ToString();
+            feedbackDetail.feedbackText1 = sqlDt.Rows[0]["FeedbackText1"].ToString();
+            feedbackDetail.feedbackRating1 = Convert.ToInt32(sqlDt.Rows[0]["FeedbackRating1"]);
+            feedbackDetail.feedbackText2 = sqlDt.Rows[0]["FeedbackText2"].ToString();
+            feedbackDetail.feedbackRating2 = Convert.ToInt32(sqlDt.Rows[0]["FeedbackRating2"]);
+            feedbackDetail.feedbackText3 = sqlDt.Rows[0]["FeedbackText3"].ToString();
+            feedbackDetail.feedbackRating3 = Convert.ToInt32(sqlDt.Rows[0]["FeedbackRating3"]);
+            feedbackDetail.feedbackText4 = sqlDt.Rows[0]["FeedbackText4"].ToString();
+            feedbackDetail.feedbackRating4 = Convert.ToInt32(sqlDt.Rows[0]["FeedbackRating4"]);
+            feedbackDetail.overallRating = Convert.ToDouble(sqlDt.Rows[0]["OverallRating"]);
+
+            return feedbackDetail;
+        }
     }
 }
