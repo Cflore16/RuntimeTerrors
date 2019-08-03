@@ -767,5 +767,51 @@ namespace ProjectTemplate
                 }
             }
         }
+        [WebMethod(EnableSession = true)]
+        public string InsertFeedBack(string EmployeeId,string department, string FB1,string FBR1, string FB2,string FBR2,string FB3,string FBR3,string FB4,string FBR4)
+        {
+            string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            MySqlConnection conn = new MySqlConnection(connStr);
+            string sql = "INSERT INTO Feedback (EmployeeId, Department, FeedbackText1, FeedbackRating1, FeedbackText2,FeedbackRating2,FeedbackText3,FeedbackRating3,FeedbackText4,FeedbackRating4) VALUES (@idValue, @depValue, @FBT1Value, @FBR1Value, @FBT2Value,@FBR2Value,@FBT3Value,@FBR3Value,@FBT4Value,@FBR4Value,)"; 
+            
+
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+           
+            cmd.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(EmployeeId));
+            cmd.Parameters.AddWithValue("@depValue", HttpUtility.UrlDecode(department));
+            cmd.Parameters.AddWithValue("@FBT1Value", HttpUtility.UrlDecode(FB1));
+            cmd.Parameters.AddWithValue("@FBR1Value", HttpUtility.UrlDecode(FBR1));
+            cmd.Parameters.AddWithValue("@FBT2Value", HttpUtility.UrlDecode(FB2));
+            cmd.Parameters.AddWithValue("@FBR2Value", HttpUtility.UrlDecode(FBR2));
+            cmd.Parameters.AddWithValue("@FBT3Value", HttpUtility.UrlDecode(FB3));
+            cmd.Parameters.AddWithValue("@FBR3Value", HttpUtility.UrlDecode(FBR3));
+            cmd.Parameters.AddWithValue("@FBT4Value", HttpUtility.UrlDecode(FB4));
+            cmd.Parameters.AddWithValue("@FBR4Value", HttpUtility.UrlDecode(FBR4));
+
+
+
+
+            try
+            {
+                conn.Open();
+
+                cmd.ExecuteNonQuery();
+                
+
+                return "Feedback saved successfully";
+            }
+            catch (Exception)
+            {
+                return "Feedback cannot be saved";
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
+        }
+
     }
 }
