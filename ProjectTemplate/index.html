@@ -781,6 +781,70 @@
                 }
             });
         }
+        //Function which will store employee's feedback 
+        function InsertFeedback() {
+            var q1value = getElementById("Q1").value;
+            var q1Rating;
+            var q2value = getElementById("Q2").value;
+            var q2Rating;
+            var q3value = getElementById("Q3").value;
+            var q3Rating;
+            var q4value = getElementById("Q4").value;
+            var q4Rating;
+            var department;
+            if (document.getElementById("CSales").clicked == true) {
+                department = "Sales";
+            }
+            if (document.getElementById("CHR").clicked == true) {
+                department = "Human Resources";
+            }
+            if (document.getElementById("CIT").clicked == true) {
+                department = "IT";
+            }
+            if (document.getElementById("CMarketing").clicked == true) {
+                department = "Marketing";
+            }
+            if (document.getElementById("CAccounting").clicked == true) {
+                department = "Accounting";
+            }
+            if (document.getElementById("CService").clicked == true) {
+                department = "Customer Service";
+            }
+            if (document.getElementById("COperations").clicked == true) {
+                department = "Operations";
+            }
+            if (document.getElementById("CDistribution").clicked == true) {
+                department = "Distribution";
+            }
+            
+            var webMethod = "ProjectServices.asmx/InsertFeedBack";
+            var parameters = "{\"EmployeeId\":\"" + encodeURI(globalEmployeeId) + "\",\"department\":\"" + encodeURI(department) + "\",\"FB1\":\"" + encodeURI(q1value) + "\",\"FBR1\":\"" + encodeURI(q1Rating) + "\",\"FB2\":\"" + encodeURI(q2value) + "\",\"FBR2\":\"" + encodeURI(q2Rating) + "\",\"FB3\":\"" + encodeURI(q3value) + "\",\"FBR3\":\"" + encodeURI(q3Rating) + "\",\"FB4\":\"" + encodeURI(q4value) + "\",\"FBR4\":\"" + encodeURI(q4Rating) + "\"}";
+            
+
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    var responseFromServer = msg.d;
+
+                    console.log(responseFromServer);
+
+                },
+                error: function (e) {
+
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+
+
+
+        }
 
     </script>
     <!--END OF YOUR OWN JAVASCRIPT-->
@@ -1529,26 +1593,26 @@
             <br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackPage')">Sales</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackPage')">HR</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button id="CSales" class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackPage')">Sales</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button id="CHR" class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackPage')">HR</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackPage')">IT</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackPage')">Marketing</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button id="CIT" class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackPage')">IT</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button id="CMarketing" class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackPage')">Marketing</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackPage')">Accounting</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackPage')">Service</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button id="CAccounting" class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackPage')">Accounting</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button id="CService" class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackPage')">Service</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackPage')">Operations</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackPage')">Distribution</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button id="COperations" class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackPage')">Operations</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button id="CDistribution" class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackPage')">Distribution</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br>
@@ -1878,7 +1942,7 @@
 
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><textarea name="Text1" cols="40" rows="5"></textarea></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><textarea id="Q1" name="Text1" cols="40" rows="5"></textarea></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
@@ -1902,7 +1966,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><textarea name="Text1" cols="40" rows="5"></textarea></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><textarea id="Q2" name="Text1" cols="40" rows="5"></textarea></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
@@ -1926,7 +1990,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><textarea name="Text1" cols="40" rows="5"></textarea></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><textarea id="Q3" name="Text1" cols="40" rows="5"></textarea></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
@@ -1951,7 +2015,7 @@
 
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12"><textarea name="Text1" cols="40" rows="5"></textarea></div>
+                <div class="col-lg-10 col-md-12 col-sm-12"><textarea id="Q4" name="Text1" cols="40" rows="5"></textarea></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
