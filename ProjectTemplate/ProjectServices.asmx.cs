@@ -772,7 +772,7 @@ namespace ProjectTemplate
         {
             string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
             MySqlConnection conn = new MySqlConnection(connStr);
-            string sql = "INSERT INTO Feedback (EmployeeId, Department, FeedbackText1, FeedbackRating1, FeedbackText2,FeedbackRating2,FeedbackText3,FeedbackRating3,FeedbackText4,FeedbackRating4) VALUES (@idValue, @depValue, @FBT1Value, @FBR1Value, @FBT2Value,@FBR2Value,@FBT3Value,@FBR3Value,@FBT4Value,@FBR4Value,)"; 
+            string sql = "INSERT INTO Feedback (EmployeeId, Department, FeedbackText1, FeedbackRating1, FeedbackText2,FeedbackRating2,FeedbackText3,FeedbackRating3,FeedbackText4,FeedbackRating4) VALUES (@idValue, @depValue, @FBT1Value, @FBR1Value, @FBT2Value,@FBR2Value,@FBT3Value,@FBR3Value,@FBT4Value,@FBR4Value);"; 
             
 
             MySqlCommand cmd = new MySqlCommand(sql, conn);
@@ -787,8 +787,6 @@ namespace ProjectTemplate
             cmd.Parameters.AddWithValue("@FBR3Value", HttpUtility.UrlDecode(FBR3));
             cmd.Parameters.AddWithValue("@FBT4Value", HttpUtility.UrlDecode(FB4));
             cmd.Parameters.AddWithValue("@FBR4Value", HttpUtility.UrlDecode(FBR4));
-
-
 
 
             try
