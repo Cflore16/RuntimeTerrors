@@ -13,6 +13,12 @@
         //A global variable to store the current user's employeeId
         var globalEmployeeId = null;
 
+        var globalRating1;
+        var globalRating2;
+        var globalRating3;
+        var globalRating4;
+        var globalChosenDepartment;
+
         function TestButtonHandler() {
             var webMethod = "ProjectServices.asmx/TestConnection";
             var parameters = "{}";
@@ -783,44 +789,20 @@
         }
         //Function which will store employee's feedback 
         function InsertFeedback() {
-            var q1value = getElementById("Q1").value;
-            var q1Rating;
-            var q2value = getElementById("Q2").value;
-            var q2Rating;
-            var q3value = getElementById("Q3").value;
-            var q3Rating;
-            var q4value = getElementById("Q4").value;
-            var q4Rating;
-            var department;
-            if (document.getElementById("CSales").clicked == true) {
-                department = "Sales";
-            }
-            if (document.getElementById("CHR").clicked == true) {
-                department = "Human Resources";
-            }
-            if (document.getElementById("CIT").clicked == true) {
-                department = "IT";
-            }
-            if (document.getElementById("CMarketing").clicked == true) {
-                department = "Marketing";
-            }
-            if (document.getElementById("CAccounting").clicked == true) {
-                department = "Accounting";
-            }
-            if (document.getElementById("CService").clicked == true) {
-                department = "Customer Service";
-            }
-            if (document.getElementById("COperations").clicked == true) {
-                department = "Operations";
-            }
-            if (document.getElementById("CDistribution").clicked == true) {
-                department = "Distribution";
-            }
+            var q1value = document.getElementById("Q1").value;
+            var q1Rating = globalRating1;
+            var q2value = document.getElementById("Q2").value;
+            var q2Rating = globalRating2;
+            var q3value = document.getElementById("Q3").value;
+            var q3Rating = globalRating3;
+            var q4value = document.getElementById("Q4").value;
+            var q4Rating = globalRating4;
+            var department = globalChosenDepartment;
             
             var webMethod = "ProjectServices.asmx/InsertFeedBack";
             var parameters = "{\"EmployeeId\":\"" + encodeURI(globalEmployeeId) + "\",\"department\":\"" + encodeURI(department) + "\",\"FB1\":\"" + encodeURI(q1value) + "\",\"FBR1\":\"" + encodeURI(q1Rating) + "\",\"FB2\":\"" + encodeURI(q2value) + "\",\"FBR2\":\"" + encodeURI(q2Rating) + "\",\"FB3\":\"" + encodeURI(q3value) + "\",\"FBR3\":\"" + encodeURI(q3Rating) + "\",\"FB4\":\"" + encodeURI(q4value) + "\",\"FBR4\":\"" + encodeURI(q4Rating) + "\"}";
             
-
+            console.log(parameters);
 
             //jQuery ajax method
             $.ajax({
@@ -835,15 +817,67 @@
 
                     console.log(responseFromServer);
 
+                    goToHome(globalAdminFlag);
+
                 },
                 error: function (e) {
 
                     alert("this code will only execute if javascript is unable to access the webservice");
                 }
             });
+        }
 
+        $(document).ready(function () {
 
+            $('input[name*="rating1"]').change(function () {
+                var me = $(this);
 
+                var ratingValue1 = me.attr('value');
+
+                console.log("rating1: " + ratingValue1);
+
+                globalRating1 = ratingValue1;
+
+            });
+
+            $('input[name*="rating2"]').change(function () {
+                var me = $(this);
+
+                var ratingValue2 = me.attr('value');
+
+                console.log("rating2: " + ratingValue2);
+
+                globalRating2 = ratingValue2;
+
+            });
+
+            $('input[name*="rating3"]').change(function () {
+                var me = $(this);
+
+                var ratingValue3 = me.attr('value');
+
+                console.log("rating3: " + ratingValue3);
+
+                globalRating3 = ratingValue3;
+
+            });
+
+            $('input[name*="rating4"]').change(function () {
+                var me = $(this);
+
+                var ratingValue4 = me.attr('value');
+
+                console.log("rating4: " + ratingValue4);
+
+                globalRating4 = ratingValue4;
+
+            });
+        });
+
+        function selectedDepartment(department) {
+            console.log("Department chosen: " + department);
+
+            globalChosenDepartment = department;
         }
 
     </script>
@@ -1593,26 +1627,26 @@
             <br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button id="CSales" class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackPage')">Sales</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button id="CHR" class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackPage')">HR</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button id="CSales" value="Sales" class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackPage'); selectedDepartment(this.value)">Sales</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button id="CHR" value="HR" class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackPage'); selectedDepartment(this.value)">HR</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button id="CIT" class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackPage')">IT</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button id="CMarketing" class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackPage')">Marketing</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button id="CIT" value="IT" class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackPage'); selectedDepartment(this.value)">IT</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button id="CMarketing" value="Marketing" class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackPage'); selectedDepartment(this.value)">Marketing</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button id="CAccounting" class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackPage')">Accounting</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button id="CService" class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackPage')">Service</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button id="CAccounting" value="Accounting" class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackPage'); selectedDepartment(this.value)">Accounting</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button id="CService" value="Customer Service" class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackPage'); selectedDepartment(this.value)">Service</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button id="COperations" class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackPage')">Operations</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button id="CDistribution" class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackPage')">Distribution</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button id="COperations" value="Operations" class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackPage'); selectedDepartment(this.value)">Operations</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button id="CDistribution" value="Distribution" class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackPage'); selectedDepartment(this.value)">Distribution</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br>
@@ -2035,7 +2069,7 @@
             <div class="row">
                 <div class="col-lg-04 col-md-05 col-sm-05 red"><button class="red hoverRed whiteBut" onclick="showTab(event, 'chooseDepartPage')">Back</button></div>
                 <div class="col-lg-04 col-md-02 col-sm-02 wht"></div>
-                <div class="col-lg-04 col-md-05 col-sm-05 blu"><button class="blu hoverBlu whiteBut" onclick="goToHome(globalAdminFlag)">Submit</button></div>
+                <div class="col-lg-04 col-md-05 col-sm-05 blu"><button class="blu hoverBlu whiteBut" onclick="InsertFeedback()">Submit</button></div>
             </div>
             <br>
         </div>
@@ -2185,7 +2219,5 @@
             <br><br>
         </div>
     </div>
-    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-    <!--<script src="./js/index.js"></script>-->
 </body>
 </html>
