@@ -18,6 +18,7 @@
         var globalRating3;
         var globalRating4;
         var globalChosenDepartment;
+        var globalFilteredDepartment;
 
         function TestButtonHandler() {
             var webMethod = "ProjectServices.asmx/TestConnection";
@@ -241,8 +242,11 @@
                             //$("#allfeedbackTable").append(feedbackItem);
                         }
 
+                       
 
-
+                        var filterHeader = document.getElementById("filteredCategory");
+                        filterHeader.innerHTML = globalFilteredDepartment;
+                       
                         document.getElementById('loginPage').style.display = "none";
                         showTab(event, 'feedbackListPage');
                     }
@@ -1023,6 +1027,17 @@
             globalChosenDepartment = department;
         }
 
+        function filteredDepartment(department) {
+            
+            if (department != "view all") {
+                var splicedString = department.slice(0, -1);
+                globalFilteredDepartment = "filter: " + splicedString;
+            } else {
+                globalFilteredDepartment = "filter: " + department;
+            }
+              
+        }
+
     </script>
     <!--END OF YOUR OWN JAVASCRIPT-->
 
@@ -1578,9 +1593,13 @@
         }
 
         tr:nth-child(even) {
-            background-color: lightblue;
+            background-color: #babdcc;
         }
 
+        th {
+            background-color: #313a66;
+            color: white;
+        }
 
         .rankingFormat3 {
             color: white;
@@ -1964,32 +1983,32 @@
             <br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackListPage')">Sales</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button class="pgre boldbutton hoverPGre" oonclick="showTab(event, 'feedbackListPage')">HR</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button id="SalesV" class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">Sales</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button id="HRV" class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">HR</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackListPage')">IT</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackListPage')">Marketing</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button id="ITV" class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">IT</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button id="MarketingV" class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">Marketing</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackListPage')">Accounting</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackListPage')">Service</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button id="AccountingV" class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">Accounting</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button id="SerivceV" class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">Service</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackListPage')">Operations</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackListPage')">Distribution</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button id="OperationsV" class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">Operations</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button id="DistributionV" class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">Distribution</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="LoadAllFeedback()">View all</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="LoadAllFeedback(); filteredDepartment('view all');">View all</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
