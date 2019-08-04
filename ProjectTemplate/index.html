@@ -214,7 +214,7 @@
 
         //Dispalys all feedback on feedback list page
         function LoadAllFeedback() {
-            document.getElementById("allFeedbackList").innerHTML = "";
+            //$("##allFeedbackTable:not(:first)").remove();
 
             var webMethod = "ProjectServices.asmx/GetAllFeedback";
             $.ajax({
@@ -228,32 +228,17 @@
                     if (msg.d.length > 0) {
 
                         for (var i = 0; i < msg.d.length; i++) {
-                            feedbackItem =
-                                "<li class='allFeedbackLI'> <a href='#' class='allFeedbackAnchor' id='" + msg.d[i].feedbackRecordId + "' onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(this.id);\">"
-                            + "<strong>" + msg.d[i].department + ": </strong> Overall Rating: " + msg.d[i].overallRating + " - " + msg.d[i].feedbackDate
-                                + "</a></li>";
-
-
-                                //"<li class='allFeedbackLI' <a class='allFeedbackAnchor' id='" + msg.d[i].feedbackRecordId + "' onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(this.id);\">"
-                                //+ "<strong>Department: </strong>" + msg.d[i].department + " - <strong>Overall Rating: </strong>" + msg.d[i].overallRating + " - <strong>Date: </strong>" + msg.d[i].feedbackDate
-                                //+ "</a></li>";
-
-
-
-
-                                //"<li class=\"feedback\"> <a href=\"#\" class=\"accountLA\" \"accountLA:hover\" ID='" + msg.d[i].employeeId + "' onclick=\"showTab(event, 'accountApprovalPage'); LoadAccountRequestDetail(this.id);\">"
-                                //+ "#" + "<strong>" + msg.d[i].employeeId + "</strong>" + " - " + msg.d[i].firstName + " " + msg.d[i].lastName
-                                //+ "</a></li>";
-
-
-
-                            $("#allFeedbackList").append(feedbackItem);
-
-
-                            feedbackElems = document.getElementsByClassName("allFeedbackAnchor");
-                            for (j = 0; j < feedbackElems.length; j++) {
-                                feedbackElems[j].Id = msg.d[i].feedbackRecordId;
-                            }
+                            var id = msg.d[i].feedbackRecordId;
+                            var row = 
+                            //"<li class=\"accountList\"> <a href=\"#\" class=\"accountLA\" \"accountLA:hover\" ID='" + msg.d[i].feedbackRecordId + "' onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(this.id);\">"
+                            //        + "<strong>" + msg.d[i].department + ": </strong>" + msg.d[i].overallRating + " rating - " + msg.d[i].feedbackDate
+                            //        + "</a></li>";
+                                "<tr><td><a href=\"#\" class=\"accountLA accountLA:hover\" onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(" + id + ");\">" + msg.d[i].department + "</a></td>"
+                                    + "<td><a href=\"#\" class=\"accountLA accountLA:hover\" onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(" + id + ");\">" + msg.d[i].overallRating + "</a></td>"
+                                    + "<td><a href=\"#\" class=\"accountLA accountLA:hover\" onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(" + id + ");\">" + msg.d[i].feedbackDate + "</a></td></tr>";
+                            // $("#allfeedbackTable tr:first").after(row);
+                            $("#allfeedbackTable tbody").append(row);
+                            //$("#allfeedbackTable").append(feedbackItem);
                         }
 
 
@@ -954,6 +939,10 @@
             var q4value = document.getElementById("Q4").value;
             var q4Rating = globalRating4;
             var department = globalChosenDepartment;
+
+            // var department = selectedDepartment();
+
+            // console.log("Chosen Department: " + department);
             
             var webMethod = "ProjectServices.asmx/InsertFeedBack";
             var parameters = "{\"EmployeeId\":\"" + encodeURI(globalEmployeeId) + "\",\"department\":\"" + encodeURI(department) + "\",\"FB1\":\"" + encodeURI(q1value) + "\",\"FBR1\":\"" + encodeURI(q1Rating) + "\",\"FB2\":\"" + encodeURI(q2value) + "\",\"FBR2\":\"" + encodeURI(q2Rating) + "\",\"FB3\":\"" + encodeURI(q3value) + "\",\"FBR3\":\"" + encodeURI(q3Rating) + "\",\"FB4\":\"" + encodeURI(q4value) + "\",\"FBR4\":\"" + encodeURI(q4Rating) + "\"}";
@@ -1031,8 +1020,6 @@
         });
 
         function selectedDepartment(department) {
-            console.log("Department chosen: " + department);
-
             globalChosenDepartment = department;
         }
 
@@ -1562,6 +1549,11 @@
             padding-left: 2%;
         }
 
+        .feedbackList {
+            text-align: left;
+            padding-left: 1%;
+        }
+
         .accountLA {
             text-decoration: none;
             color: black;
@@ -1572,6 +1564,23 @@
                 color: navy;
                 cursor: pointer;
             }
+
+        #allfeedbackTable {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid black;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: lightblue;
+        }
+
 
         .rankingFormat3 {
             color: white;
@@ -1923,7 +1932,7 @@
             <br><br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 gry scrollableDiv">
+                <div class="col-lg-10 col-md-12 col-sm-12 gry">
                     <ul id="disableAccountList"></ul>
                 </div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
@@ -2006,9 +2015,22 @@
             <div id="allFeedbackContainer" class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 gry">
-                    <ul id="allFeedbackList" style="list-style-type:none;">
+                         <!--<ul id="allFeedbackList" style="list-style-type:none;">
                         <li class="accountList"><a href="#" class="accountLA">Sales: (sample feedback)</a></li>
-                    </ul>
+                        </ul>-->
+                    <table id="allfeedbackTable" class="fixed_header">
+                        <thead>
+                            <tr>
+                                <th>Department</th>
+                                <th>Rating</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allfeedbackTableBody">
+
+                        </tbody>
+                        
+                    </table>
                 </div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
