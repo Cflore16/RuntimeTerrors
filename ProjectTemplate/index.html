@@ -257,6 +257,49 @@
             });
         }
 
+
+        //Dispalys filtered feedback on feedback list page
+        function LoadFilteredFeedback(departmentValue) {
+            //$("##allFeedbackTable:not(:first)").remove();
+
+            var webMethod = "ProjectServices.asmx/GetFilteredFeedback";
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+
+
+                    if (msg.d.length > 0) {
+
+                        for (var i = 0; i < msg.d.length; i++) {
+                            var id = msg.d[i].feedbackRecordId;
+                            var row =
+                                //"<li class=\"accountList\"> <a href=\"#\" class=\"accountLA\" \"accountLA:hover\" ID='" + msg.d[i].feedbackRecordId + "' onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(this.id);\">"
+                                //        + "<strong>" + msg.d[i].department + ": </strong>" + msg.d[i].overallRating + " rating - " + msg.d[i].feedbackDate
+                                //        + "</a></li>";
+                                "<tr><td><a href=\"#\" class=\"accountLA accountLA:hover\" onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(" + id + ");\">" + msg.d[i].department + "</a></td>"
+                                + "<td><a href=\"#\" class=\"accountLA accountLA:hover\" onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(" + id + ");\">" + msg.d[i].overallRating + "</a></td>"
+                                + "<td><a href=\"#\" class=\"accountLA accountLA:hover\" onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(" + id + ");\">" + msg.d[i].feedbackDate + "</a></td></tr>";
+                            // $("#allfeedbackTable tr:first").after(row);
+                            $("#allfeedbackTable tbody").append(row);
+                            //$("#allfeedbackTable").append(feedbackItem);
+                        }
+
+
+
+                        document.getElementById('loginPage').style.display = "none";
+                        showTab(event, 'feedbackListPage');
+                    }
+                },
+                error: function (e) {
+                    alert("Error communicating with the server.");
+                }
+            });
+        }
+
         //Dispalys feedback detail on feedback details page
         function LoadFeedbackDetail(recordIdValue) {
 
@@ -288,52 +331,85 @@
                     question3.disabled = true;
                     question4.disabled = true;
 
+
+                    starRatingElements = document.getElementsByClassName("viewFeedbackRatingStar");
+
+                    for (var i = 0; i < starRatingElements.length; i++) {
+                        debugger;
+                        starRatingElements[i].disabled = false;
+                    }
+
+                    for (var i = 0; i < starRatingElements.length; i++) {
+                        debugger;
+                        starRatingElements[i].disabled = true;
+                    }
+
                     if (feedbackDetail.feedbackRating1 == 1) {
-                        document.getElementById("rating-1da").checked = true;                 
+                        document.getElementById("rating-1da").checked = true;
+                        //document.getElementById("rating-1da").disabled = false;
                     } else if (feedbackDetail.feedbackRating1 == 2) {
                         document.getElementById("rating-2da").checked = true;
+                        //document.getElementById("rating-2da").disabled = false;
                     } else if (feedbackDetail.feedbackRating1 == 3) {
                         document.getElementById("rating-3da").checked = true;
+                        //document.getElementById("rating-3da").disabled = false;
                     } else if (feedbackDetail.feedbackRating1 == 4) {
                         document.getElementById("rating-4da").checked = true;
+                        //document.getElementById("rating-4da").disabled = false;
                     } else if (feedbackDetail.feedbackRating1 == 5) {
                         document.getElementById("rating-5da").checked = true;
+                        //document.getElementById("rating-5da").disabled = false;
                     }
 
                     if (feedbackDetail.feedbackRating2 == 1) {
                         document.getElementById("rating-1db").checked = true;
+                        //document.getElementById("rating-1db").disabled = false;
                     } else if (feedbackDetail.feedbackRating2 == 2) {
                         document.getElementById("rating-2db").checked = true;
+                       // document.getElementById("rating-2db").disabled = false;
                     } else if (feedbackDetail.feedbackRating2 == 3) {
                         document.getElementById("rating-3db").checked = true;
+                       // document.getElementById("rating-3db").disabled = false;
                     } else if (feedbackDetail.feedbackRating2 == 4) {
                         document.getElementById("rating-4db").checked = true;
+                       // document.getElementById("rating-4db").disabled = false;
                     } else if (feedbackDetail.feedbackRating2 == 5) {
                         document.getElementById("rating-5db").checked = true;
+                       // document.getElementById("rating-5db").disabled = false;
                     }
 
                     if (feedbackDetail.feedbackRating3 == 1) {
                         document.getElementById("rating-1dc").checked = true;
+                       // document.getElementById("rating-1dc").disabled = false;
                     } else if (feedbackDetail.feedbackRating3 == 2) {
                         document.getElementById("rating-2dc").checked = true;
+                       // document.getElementById("rating-2dc").disabled = false;
                     } else if (feedbackDetail.feedbackRating3 == 3) {
                         document.getElementById("rating-3dc").checked = true;
+                       // document.getElementById("rating-3dc").disabled = false;
                     } else if (feedbackDetail.feedbackRating3 == 4) {
                         document.getElementById("rating-4dc").checked = true;
+                       // document.getElementById("rating-4dc").disabled = false;
                     } else if (feedbackDetail.feedbackRating3 == 5) {
                         document.getElementById("rating-5dc").checked = true;
+                       // document.getElementById("rating-5dc").disabled = false;
                     }
 
                     if (feedbackDetail.feedbackRating2 == 1) {
                         document.getElementById("rating-1dd").checked = true;
+                       // document.getElementById("rating-1dd").disabled = false;
                     } else if (feedbackDetail.feedbackRating4 == 2) {
                         document.getElementById("rating-2dd").checked = true;
+                        //document.getElementById("rating-2dd").disabled = false;
                     } else if (feedbackDetail.feedbackRating4 == 3) {
                         document.getElementById("rating-3dd").checked = true;
+                       // document.getElementById("rating-3dd").disabled = false;
                     } else if (feedbackDetail.feedbackRating4 == 4) {
                         document.getElementById("rating-4dd").checked = true;
+                        //document.getElementById("rating-4dd").disabled = false;
                     } else if (feedbackDetail.feedbackRating4 == 5) {
                         document.getElementById("rating-5dd").checked = true;
+                       // document.getElementById("rating-5dd").disabled = false;
                     }
 
                     console.log("feedback test rating1:" + feedbackDetail.feedbackRating1);
@@ -356,9 +432,7 @@
                 }
             });
         }
-
-   
-    
+  
         function LoadAccountRequestDetail(ID) {
 
             console.log(ID);
@@ -1975,6 +2049,7 @@
         <br>
         <div class="AppBackground">
             <br>
+            
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>View by Department</h2></div>
@@ -1983,26 +2058,26 @@
             <br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button id="SalesV" class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">Sales</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button id="HRV" class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">HR</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button id="SalesV" class="pblu boldbutton hoverPBlu" onclick="LoadFilteredFeedback('Sales'); filteredDepartment(this.id);">Sales</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button id="HRV" class="pgre boldbutton hoverPGre" onclick="LoadFilteredFeedback('HR'); filteredDepartment(this.id);">HR</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button id="ITV" class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">IT</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button id="MarketingV" class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">Marketing</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button id="ITV" class="porg boldbutton hoverPOrg" onclick="LoadFilteredFeedback('IT'); filteredDepartment(this.id);">IT</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button id="MarketingV" class="pred boldbutton hoverPRed" onclick="LoadFilteredFeedback('Marketing'); filteredDepartment(this.id);">Marketing</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button id="AccountingV" class="pblu boldbutton hoverPBlu" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">Accounting</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button id="SerivceV" class="pgre boldbutton hoverPGre" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">Service</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pblu"><button id="AccountingV" class="pblu boldbutton hoverPBlu" onclick="LoadFilteredFeedback('Accounting'); filteredDepartment(this.id);">Accounting</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pgre"><button id="SerivceV" class="pgre boldbutton hoverPGre" onclick="LoadFilteredFeedback('Customer Service'); filteredDepartment(this.id);">Service</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button id="OperationsV" class="porg boldbutton hoverPOrg" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">Operations</button></div>
-                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button id="DistributionV" class="pred boldbutton hoverPRed" onclick="showTab(event, 'feedbackListPage'); filteredDepartment(this.id);">Distribution</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 porg"><button id="OperationsV" class="porg boldbutton hoverPOrg" onclick="LoadFilteredFeedback('Operations'); filteredDepartment(this.id);">Operations</button></div>
+                <div class="col-lg-05 col-md-06 col-sm-06 pred"><button id="DistributionV" class="pred boldbutton hoverPRed" onclick="LoadFilteredFeedback('Distribution'); filteredDepartment(this.id);">Distribution</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br>
@@ -2298,11 +2373,11 @@
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 rating">
                     <div class="star-cb-group">
-                        <input readonly type="radio" id="rating-5da" name="rating1d" value="5" /><label for="rating-5a"></label>
-                        <input readonly type="radio" id="rating-4da" name="rating1d" value="4" /><label for="rating-4a"></label>
-                        <input readonly type="radio" id="rating-3da" name="rating1d" value="3" /><label for="rating-3a"></label>
-                        <input readonly type="radio" id="rating-2da" name="rating1d" value="2" /><label for="rating-2a"></label>
-                        <input readonly type="radio" id="rating-1da" name="rating1d" value="1" /><label for="rating-1a"></label>
+                        <input class="viewFeedbackRatingStar" readonly type="radio" id="rating-5da" name="rating1d" value="5" /><label for="rating-5a"></label>
+                        <input class="viewFeedbackRatingStar" readonly type="radio" id="rating-4da" name="rating1d" value="4" /><label for="rating-4a"></label>
+                        <input class="viewFeedbackRatingStar" readonly type="radio" id="rating-3da" name="rating1d" value="3" /><label for="rating-3a"></label>
+                        <input class="viewFeedbackRatingStar" readonly type="radio" id="rating-2da" name="rating1d" value="2" /><label for="rating-2a"></label>
+                        <input class="viewFeedbackRatingStar" readonly type="radio" id="rating-1da" name="rating1d" value="1" /><label for="rating-1a"></label>
                     </div>
                 </div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
@@ -2322,11 +2397,11 @@
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 rating">
                     <div class="star-cb-group">
-                        <input type="radio" id="rating-5db" name="rating2d" value="5" /><label for="rating-5db"></label>
-                        <input type="radio" id="rating-4db" name="rating2d" value="4" /><label for="rating-4db"></label>
-                        <input type="radio" id="rating-3db" name="rating2d" value="3" /><label for="rating-3db"></label>
-                        <input type="radio" id="rating-2db" name="rating2d" value="2" /><label for="rating-2db"></label>
-                        <input type="radio" id="rating-1db" name="rating2d" value="1" /><label for="rating-1db"></label>
+                        <input class="viewFeedbackRatingStar" type="radio" id="rating-5db" name="rating2d" value="5" /><label for="rating-5db"></label>
+                        <input class="viewFeedbackRatingStar" type="radio" id="rating-4db" name="rating2d" value="4" /><label for="rating-4db"></label>
+                        <input class="viewFeedbackRatingStar" type="radio" id="rating-3db" name="rating2d" value="3" /><label for="rating-3db"></label>
+                        <input class="viewFeedbackRatingStar" type="radio" id="rating-2db" name="rating2d" value="2" /><label for="rating-2db"></label>
+                        <input class="viewFeedbackRatingStar" type="radio" id="rating-1db" name="rating2d" value="1" /><label for="rating-1db"></label>
                     </div>
                 </div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
@@ -2346,11 +2421,11 @@
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 rating">
                     <div class="star-cb-group">
-                        <input type="radio" id="rating-5dc" name="rating3d" value="5" /><label for="rating-5dc"></label>
-                        <input type="radio" id="rating-4dc" name="rating3d" value="4" /><label for="rating-4dc"></label>
-                        <input type="radio" id="rating-3dc" name="rating3d" value="3" /><label for="rating-3dc"></label>
-                        <input type="radio" id="rating-2dc" name="rating3d" value="2" /><label for="rating-2dc"></label>
-                        <input type="radio" id="rating-1dc" name="rating3d" value="1" /><label for="rating-1dc"></label>
+                        <input class="viewFeedbackRatingStar" type="radio" id="rating-5dc" name="rating3d" value="5" /><label for="rating-5dc"></label>
+                        <input class="viewFeedbackRatingStar" type="radio" id="rating-4dc" name="rating3d" value="4" /><label for="rating-4dc"></label>
+                        <input class="viewFeedbackRatingStar" type="radio" id="rating-3dc" name="rating3d" value="3" /><label for="rating-3dc"></label>
+                        <input class="viewFeedbackRatingStar" type="radio" id="rating-2dc" name="rating3d" value="2" /><label for="rating-2dc"></label>
+                        <input class="viewFeedbackRatingStar" type="radio" id="rating-1dc" name="rating3d" value="1" /><label for="rating-1dc"></label>
                     </div>
                 </div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
@@ -2371,11 +2446,11 @@
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 rating">
                     <div class="star-cb-group">
-                        <input type="radio" id="rating-5dd" name="rating4d" value="5" /><label for="rating-5dd"></label>
-                        <input type="radio" id="rating-4dd" name="rating4d" value="4" /><label for="rating-4dd"></label>
-                        <input type="radio" id="rating-3dd" name="rating4d" value="3" /><label for="rating-3dd"></label>
-                        <input type="radio" id="rating-2dd" name="rating4d" value="2" /><label for="rating-2dd"></label>
-                        <input type="radio" id="rating-1dd" name="rating4d" value="1" /><label for="rating-1dd"></label>
+                        <input class="viewFeedbackRatingStar" type="radio" id="rating-5dd" name="rating4d" value="5" /><label for="rating-5dd"></label>
+                        <input class="viewFeedbackRatingStar" type="radio" id="rating-4dd" name="rating4d" value="4" /><label for="rating-4dd"></label>
+                        <input class="viewFeedbackRatingStar" type="radio" id="rating-3dd" name="rating4d" value="3" /><label for="rating-3dd"></label>
+                        <input class="viewFeedbackRatingStar" type="radio" id="rating-2dd" name="rating4d" value="2" /><label for="rating-2dd"></label>
+                        <input class="viewFeedbackRatingStar" type="radio" id="rating-1dd" name="rating4d" value="1" /><label for="rating-1dd"></label>
                     </div>
                 </div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>

@@ -25,7 +25,7 @@ CREATE TABLE runtime.Feedback(
     CONSTRAINT Ck_Feedback_FeedbackRating3 CHECK (FeedbackRating3 >= 0 AND FeedbackRating <= 5),
     CONSTRAINT Ck_Feedback_FeedbackRating4 CHECK (FeedbackRating4 >= 0 AND FeedbackRating <= 5),
 	CONSTRAINT Ck_Feedback_Department CHECK (Department IN (
-		'Sales', 'Human Resources', 'IT', 'Marketing', 'Accounting/Finance', 'Customer Service', 'Operations', 'Distribution'))
+		'Sales', 'HR', 'IT', 'Marketing', 'Accounting/Finance', 'Customer Service', 'Operations', 'Distribution'))
 )
 ;
 
@@ -43,7 +43,7 @@ INSERT INTO runtime.Feedback(EmployeeId, Department, FeedbackText1, FeedbackRati
 
 SELECT * FROM runtime.Feedback
 ;
-
+	
 /*
 ************************************************************
 EXAMPLE QUERIES
@@ -75,3 +75,6 @@ INSERT INTO runtime.Feedback(EmployeeId, Department, FeedbackText1, FeedbackRati
 		(@EmployeeId, @Department, @FeedbackText1, @FeedbackRating1, @FeedbackText2, @FeedbackRating2, @FeedbackText3, @FeedbackRating3, @FeedbackText4, @FeedbackRating4)
 ;
 */
+
+
+
