@@ -3,9 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Feedback System</title>
-    <!--DO NOT FORGET THIS SCRIPT TAG SO YOU CAN USE JQUERY!!!!!-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
     <script type="text/javascript">
 
         //A global variable used to detect if the logged in user is admin or not
@@ -13,6 +11,7 @@
         //A global variable to store the current user's employeeId
         var globalEmployeeId = null;
 
+        // (Will get rid of these global variables later)
         var globalRating1;
         var globalRating2;
         var globalRating3;
@@ -20,28 +19,6 @@
         var globalChosenDepartment;
         var globalFilteredDepartment;
 
-        function TestButtonHandler() {
-            var webMethod = "ProjectServices.asmx/TestConnection";
-            var parameters = "{}";
-
-            //jQuery ajax method
-            $.ajax({
-                type: "POST",
-                url: webMethod,
-                data: parameters,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (msg) {
-                    var responseFromServer = msg.d;
-                    alert(responseFromServer);
-                },
-                error: function (e) {
-                    alert("this code will only execute if javascript is unable to access the webservice");
-                }
-            });
-        }
-
-        // on load
         $(document).ready(function () {
             showHomeTab();
         });
@@ -79,9 +56,7 @@
 
         function goToHome(adminFlag) {
             if (adminFlag) {
-
                 showTab(event, 'homePage2');
-
             }
             else {
                 showTab(event, 'homePage');
@@ -104,10 +79,7 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (msg) {
-                    var currentLogon = msg.d;
-
-                     
-                    // alert(responseFromServer);
+                    var currentLogon = msg.d;           
 
                     if (currentLogon.success == true) {
                         //set globalemployeeId
@@ -139,7 +111,7 @@
                 },
                 error: function (e) {
                      
-                    alert("this code will only execute if javascript is unable to access the webservice");
+                    alert("Error communicating with the server.");
                 }
             });
         }
@@ -157,7 +129,6 @@
                 dataType: "json",
                 success: function (msg) {
                     var responseFromServer = msg.d;
-                    // alert(responseFromServer);
 
                     if (responseFromServer == true) {
                         alert("Logout Failed");
@@ -201,8 +172,6 @@
                             }
                         } 
 
-                      
-
                         document.getElementById('loginPage').style.display = "none";
                         showTab(event, 'accountsListPage');
                     }
@@ -215,7 +184,6 @@
 
         //Dispalys all feedback on feedback list page
         function LoadAllFeedback() {
-            //$("#allfeedbackTable:not(:first)").remove();
 
             displayTable = document.getElementById("allfeedbackTable");
 
@@ -231,27 +199,20 @@
                 dataType: "json",
                 success: function (msg) {
 
-
                     if (msg.d.length > 0) {
 
                         for (var i = 0; i < msg.d.length; i++) {
                             var id = msg.d[i].feedbackRecordId;
                             var row = 
-                            //"<li class=\"accountList\"> <a href=\"#\" class=\"accountLA\" \"accountLA:hover\" ID='" + msg.d[i].feedbackRecordId + "' onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(this.id);\">"
-                            //        + "<strong>" + msg.d[i].department + ": </strong>" + msg.d[i].overallRating + " rating - " + msg.d[i].feedbackDate
-                            //        + "</a></li>";
                                 "<tr><td><a href=\"#\" class=\"accountLA accountLA:hover\" onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(" + id + ");\">" + msg.d[i].department + "</a></td>"
                                     + "<td><a href=\"#\" class=\"accountLA accountLA:hover\" onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(" + id + ");\">" + msg.d[i].overallRating + "</a></td>"
                                     + "<td><a href=\"#\" class=\"accountLA accountLA:hover\" onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(" + id + ");\">" + msg.d[i].feedbackDate + "</a></td></tr>";
-                            // $("#allfeedbackTable tr:first").after(row);
+
                             $("#allfeedbackTable tbody").append(row);
-                            //$("#allfeedbackTable").append(feedbackItem);
                         }
 
-                       
-
                         var filterHeader = document.getElementById("filteredCategory");
-                        filterHeader.innerHTML = globalFilteredDepartment;
+                        filterHeader.innerHTML = "Feedback: " + globalFilteredDepartment;
                        
                         document.getElementById('loginPage').style.display = "none";
                         showTab(event, 'feedbackListPage');
@@ -263,10 +224,8 @@
             });
         }
 
-
         //Dispalys filtered feedback on feedback list page
         function LoadFilteredFeedback(departmentValue) {
-            //$("#allfeedbackTable:not(:first)").remove();
 
             displayTable = document.getElementById("allfeedbackTable");
 
@@ -285,25 +244,20 @@
                 dataType: "json",
                 success: function (msg) {
 
-
                     if (msg.d.length > 0) {
 
                         for (var i = 0; i < msg.d.length; i++) {
                             var id = msg.d[i].feedbackRecordId;
                             var row =
-                                //"<li class=\"accountList\"> <a href=\"#\" class=\"accountLA\" \"accountLA:hover\" ID='" + msg.d[i].feedbackRecordId + "' onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(this.id);\">"
-                                //        + "<strong>" + msg.d[i].department + ": </strong>" + msg.d[i].overallRating + " rating - " + msg.d[i].feedbackDate
-                                //        + "</a></li>";
                                 "<tr><td><a href=\"#\" class=\"accountLA accountLA:hover\" onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(" + id + ");\">" + msg.d[i].department + "</a></td>"
                                 + "<td><a href=\"#\" class=\"accountLA accountLA:hover\" onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(" + id + ");\">" + msg.d[i].overallRating + "</a></td>"
                                 + "<td><a href=\"#\" class=\"accountLA accountLA:hover\" onclick=\"showTab(event, 'feedbackDetailPage'); LoadFeedbackDetail(" + id + ");\">" + msg.d[i].feedbackDate + "</a></td></tr>";
-                            // $("#allfeedbackTable tr:first").after(row);
+
                             $("#allfeedbackTable tbody").append(row);
-                            //$("#allfeedbackTable").append(feedbackItem);
                         }
                         
                         var filterHeader = document.getElementById("filteredCategory");
-                        filterHeader.innerHTML = globalFilteredDepartment;
+                        filterHeader.innerHTML = "Feedback: " + globalFilteredDepartment;
 
                         document.getElementById('loginPage').style.display = "none";
                         showTab(event, 'feedbackListPage');
@@ -357,76 +311,51 @@
 
                     if (feedbackDetail.feedbackRating1 == 1) {
                         document.getElementById("rating-1da").checked = true;
-                        //document.getElementById("rating-1da").disabled = false;
                     } else if (feedbackDetail.feedbackRating1 == 2) {
                         document.getElementById("rating-2da").checked = true;
-                        //document.getElementById("rating-2da").disabled = false;
                     } else if (feedbackDetail.feedbackRating1 == 3) {
                         document.getElementById("rating-3da").checked = true;
-                        //document.getElementById("rating-3da").disabled = false;
                     } else if (feedbackDetail.feedbackRating1 == 4) {
                         document.getElementById("rating-4da").checked = true;
-                        //document.getElementById("rating-4da").disabled = false;
                     } else if (feedbackDetail.feedbackRating1 == 5) {
                         document.getElementById("rating-5da").checked = true;
-                        //document.getElementById("rating-5da").disabled = false;
                     }
 
                     if (feedbackDetail.feedbackRating2 == 1) {
                         document.getElementById("rating-1db").checked = true;
-                        //document.getElementById("rating-1db").disabled = false;
                     } else if (feedbackDetail.feedbackRating2 == 2) {
                         document.getElementById("rating-2db").checked = true;
-                       // document.getElementById("rating-2db").disabled = false;
                     } else if (feedbackDetail.feedbackRating2 == 3) {
                         document.getElementById("rating-3db").checked = true;
-                       // document.getElementById("rating-3db").disabled = false;
                     } else if (feedbackDetail.feedbackRating2 == 4) {
                         document.getElementById("rating-4db").checked = true;
-                       // document.getElementById("rating-4db").disabled = false;
                     } else if (feedbackDetail.feedbackRating2 == 5) {
                         document.getElementById("rating-5db").checked = true;
-                       // document.getElementById("rating-5db").disabled = false;
                     }
 
                     if (feedbackDetail.feedbackRating3 == 1) {
                         document.getElementById("rating-1dc").checked = true;
-                       // document.getElementById("rating-1dc").disabled = false;
                     } else if (feedbackDetail.feedbackRating3 == 2) {
                         document.getElementById("rating-2dc").checked = true;
-                       // document.getElementById("rating-2dc").disabled = false;
                     } else if (feedbackDetail.feedbackRating3 == 3) {
                         document.getElementById("rating-3dc").checked = true;
-                       // document.getElementById("rating-3dc").disabled = false;
                     } else if (feedbackDetail.feedbackRating3 == 4) {
                         document.getElementById("rating-4dc").checked = true;
-                       // document.getElementById("rating-4dc").disabled = false;
                     } else if (feedbackDetail.feedbackRating3 == 5) {
                         document.getElementById("rating-5dc").checked = true;
-                       // document.getElementById("rating-5dc").disabled = false;
                     }
 
                     if (feedbackDetail.feedbackRating2 == 1) {
                         document.getElementById("rating-1dd").checked = true;
-                       // document.getElementById("rating-1dd").disabled = false;
                     } else if (feedbackDetail.feedbackRating4 == 2) {
                         document.getElementById("rating-2dd").checked = true;
-                        //document.getElementById("rating-2dd").disabled = false;
                     } else if (feedbackDetail.feedbackRating4 == 3) {
                         document.getElementById("rating-3dd").checked = true;
-                       // document.getElementById("rating-3dd").disabled = false;
                     } else if (feedbackDetail.feedbackRating4 == 4) {
                         document.getElementById("rating-4dd").checked = true;
-                        //document.getElementById("rating-4dd").disabled = false;
                     } else if (feedbackDetail.feedbackRating4 == 5) {
                         document.getElementById("rating-5dd").checked = true;
-                       // document.getElementById("rating-5dd").disabled = false;
                     }
-
-                    console.log("feedback test rating1:" + feedbackDetail.feedbackRating1);
-                    console.log("feedback test rating2:" + feedbackDetail.feedbackRating2);
-                    console.log("feedback test rating3:" + feedbackDetail.feedbackRating3);
-                    console.log("feedback test rating4:" + feedbackDetail.feedbackRating4);
 
                     feedbackHeader.innerHTML = "Anonymous Feedback for " + feedbackDetail.department;
                     question1.innerHTML = feedbackDetail.feedbackText1;
@@ -445,17 +374,12 @@
         }
   
         function LoadAccountRequestDetail(ID) {
-
-            console.log(ID);
              
             var employeeIdValue = ID;
              
-
             var webMethod = "ProjectServices.asmx/GetAccountRequestDetails";
             var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
 
-             
-            //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
@@ -465,10 +389,6 @@
                 success: function (msg) {
                     var accountRequestDetail = msg.d;
 
-                    console.log(accountRequestDetail);
-
-                     
-
                     var id = document.getElementById("ArDetailEmployeeId");
                     id.value = accountRequestDetail.employeeId;
 
@@ -477,7 +397,6 @@
 
                     var lName = document.getElementById("ArDetailLastName");
                     lName.value = accountRequestDetail.lastName;
-
 
                     var email = document.getElementById("ArDetailEmail")
                     email.value = accountRequestDetail.email;
@@ -496,7 +415,6 @@
             var webMethod = "ProjectServices.asmx/GetAccount";
             var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
 
-            //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
@@ -505,11 +423,6 @@
                 dataType: "json",
                 success: function (msg) {
                     var accountDetail = msg.d;
-
-                    
-                    console.log(accountDetail);
-
-                     
 
                     var id = document.getElementById("EditID");
                     id.value = accountDetail.employeeId;
@@ -525,13 +438,10 @@
 
                     var email = document.getElementById("EditEM")
                     email.value = accountDetail.email;
-
-                     
                     
                     showTab(event, 'editProfilePage')
                 },
                 error: function (e) {
-
                     alert("this code will only execute if javascript is unable to access the webservice");
                 }
             });
@@ -542,11 +452,7 @@
 
             var webMethod = "ProjectServices.asmx/DenyAccountRequest";
             var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
-            
-            console.log("web service id value: " + employeeIdValue);
 
-             
-            //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
@@ -556,12 +462,8 @@
                 dataType: "json",
                 success: function (msg) {
                     var accountDenyMsg = msg.d;
-
-                    console.log(accountDenyMsg);
-
                 },
-                error: function (e) {
-                     
+                error: function (e) {                    
                     alert("this code will only execute if javascript is unable to access the webservice");
                 }
             });
@@ -573,10 +475,6 @@
             var webMethod = "ProjectServices.asmx/ApproveAccountRequest";
             var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
 
-            console.log("web service id value: " + employeeIdValue);
-
-
-            //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
@@ -586,9 +484,6 @@
                 dataType: "json",
                 success: function (msg) {
                     var accountDenyMsg = msg.d;
-
-                    console.log(accountDenyMsg);
-
                 },
                 error: function (e) {
 
@@ -607,11 +502,8 @@
             var webMethod = "ProjectServices.asmx/AccountRequest";
             var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\",\"password\":\"" + encodeURI(passwordValue) + "\",\"fName\":\"" + encodeURI(firstNameValue) + "\",\"lName\":\"" + encodeURI(lastNameValue) + "\",\"email\":\"" + encodeURI(emailValue) + "\"}";
 
-            console.log("\"employeeId\":\"" + encodeURI(employeeIdValue) + "\",\"password\":\"" + encodeURI(passwordValue) + "\",\"fName\":\"" + encodeURI(firstNameValue) + "\",\"lName\":\"" + encodeURI(lastNameValue) + "\",\"email\":\"" + encodeURI(emailValue) + "\"");
-
             showTab(event, 'loginPage');
 
-            //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
@@ -621,8 +513,6 @@
                 dataType: "json",
                 success: function (msg) {
                     var accountRequestMsg = msg.d;
-
-                    console.log(accountRequestMsg);
 
                 },
                 error: function (e) {
@@ -634,27 +524,17 @@
 
         function EditAccount() {
              
-
             var employeeIdValue = document.getElementById("EditID").value;
-             
-            var passwordValue = document.getElementById("EditPW").value;
-             
-            var firstNameValue = document.getElementById("EditFN").value;
-             
-            var lastNameValue = document.getElementById("EditLN").value;
-             
+            var passwordValue = document.getElementById("EditPW").value;            
+            var firstNameValue = document.getElementById("EditFN").value;            
+            var lastNameValue = document.getElementById("EditLN").value;            
             var emailValue = document.getElementById("EditEM").value;
-
-             
 
             var webMethod = "ProjectServices.asmx/EditProfile";
             var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\",\"password\":\"" + encodeURI(passwordValue) + "\",\"fName\":\"" + encodeURI(firstNameValue) + "\",\"lName\":\"" + encodeURI(lastNameValue) + "\",\"email\":\"" + encodeURI(emailValue) + "\"}";
 
-            console.log("\"employeeId\":\"" + encodeURI(employeeIdValue) + "\",\"password\":\"" + encodeURI(passwordValue) + "\",\"fName\":\"" + encodeURI(firstNameValue) + "\",\"lName\":\"" + encodeURI(lastNameValue) + "\",\"email\":\"" + encodeURI(emailValue) + "\"");
-
             goToHome(globalAdminFlag);
 
-            //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
@@ -664,12 +544,8 @@
                 dataType: "json",
                 success: function (msg) {
                     var editProfileMsg = msg.d;
-
-                    console.log(editProfileMsg);
-
                 },
                 error: function (e) {
-
                     alert("this code will only execute if javascript is unable to access the webservice");
                 }
             });
@@ -680,7 +556,6 @@
             var webMethod = "ProjectServices.asmx/ViewRankings";
             var parameters = "{\"test\":\"" + encodeURI("test") + "\"}";
 
-            //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
@@ -689,8 +564,6 @@
                 dataType: "json",
                 success: function (msg) {
                     var currentRankings = msg.d;
-
-                    console.log(currentRankings);
 
                     var depOneH3 = document.getElementById("rankingsDep13");
                     var depTwoH3 = document.getElementById("rankingsDep23");
@@ -716,8 +589,7 @@
                     depFourH4.innerHTML= currentRankings.rating4 + " rating - " + currentRankings.response4 + " responses";
                     depFiveH4.innerHTML = currentRankings.rating5 + " rating - " + currentRankings.response5 + " responses";
 
-                    showTab(event, 'viewRankingsPage')
-                                  
+                    showTab(event, 'viewRankingsPage')                                 
                 },
                 error: function (e) {
 
@@ -737,8 +609,6 @@
                 dataType: "json",
                 success: function (msg) {
 
-                    console.log(msg);
-
                     if (msg.d.length > 0) {
                         for (var i = 0; i < msg.d.length; i++) {
                             req = "<li class=\"accountList\"> <a href=\"#\" class=\"accountLA\" \"accountLA:hover\" ID='" + msg.d[i].employeeId + "' onclick=\"showTab(event, 'accountDisablePage'); LoadActiveAccountDetail(this.id);\">"
@@ -746,9 +616,6 @@
                                 + "</a></li>";
                             $("#activeAccountList").append(req);
                         }
-
-
-
                         document.getElementById('loginPage').style.display = "none";
                         showTab(event, 'activeAccountsPage');
                     }
@@ -761,16 +628,11 @@
 
         function LoadActiveAccountDetail(ID) {
 
-            console.log(ID);
-
             var employeeIdValue = ID;
-
 
             var webMethod = "ProjectServices.asmx/GetActiveAccountDetails";
             var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
 
-
-            //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
@@ -779,8 +641,6 @@
                 dataType: "json",
                 success: function (msg) {
                     var accountRequestDetail = msg.d;
-
-                    console.log(accountRequestDetail);
 
                     var id = document.getElementById("disableEmployeeId");
                     id.value = accountRequestDetail.employeeId;
@@ -791,7 +651,6 @@
                     var lName = document.getElementById("disableLastName");
                     lName.value = accountRequestDetail.lastName;
 
-
                     var email = document.getElementById("disableEmail")
                     email.value = accountRequestDetail.email;
 
@@ -801,12 +660,10 @@
                         makeAdmin.innerHTML = "Disable Admin";
                     } else {
                         makeAdmin.innerHTML = "Make Admin";
-                    }
-           
+                    }          
                 },
                 error: function (e) {
-
-                    alert("this code will only execute if javascript is unable to access the webservice");
+                    alert("Error communicating with the server.");
                 }
             });
         }
@@ -817,10 +674,6 @@
             var webMethod = "ProjectServices.asmx/DisableAccount";
             var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\", \"disableFlag\":\"" + "X" + "\"}";
 
-            console.log("web service id value: " + employeeIdValue);
-
-
-            //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
@@ -830,13 +683,9 @@
                 dataType: "json",
                 success: function (msg) {
                     var disableAccountMsg = msg.d;
-
-                    console.log(disableAccountMsg);
-
                 },
                 error: function (e) {
-
-                    alert("this code will only execute if javascript is unable to access the webservice");
+                    alert("Error communicating with the server.");
                 }
             });
         }
@@ -852,8 +701,6 @@
                 dataType: "json",
                 success: function (msg) {
 
-                    console.log(msg);
-
                     if (msg.d.length > 0) {
                         for (var i = 0; i < msg.d.length; i++) {
                             req = "<li class=\"accountList\"> <a href=\"#\" class=\"accountLA\" \"accountLA:hover\" ID='" + msg.d[i].employeeId + "' onclick=\"showTab(event, 'accountEnablePage'); LoadDisabledAccountDetail(this.id);\">"
@@ -861,9 +708,6 @@
                                 + "</a></li>";
                             $("#disableAccountList").append(req);
                         }
-
-
-
                         document.getElementById('loginPage').style.display = "none";
                         showTab(event, 'disableAccountListPage');
                     }
@@ -875,17 +719,11 @@
         }
 
         function LoadDisabledAccountDetail(ID) {
-
-            console.log(ID);
-
             var employeeIdValue = ID;
-
 
             var webMethod = "ProjectServices.asmx/GetDisabledAccountDetails";
             var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
 
-
-            //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
@@ -894,8 +732,6 @@
                 dataType: "json",
                 success: function (msg) {
                     var accountRequestDetail = msg.d;
-
-                    console.log(accountRequestDetail);
 
                     var id = document.getElementById("enableEmployeeId");
                     id.value = accountRequestDetail.employeeId;
@@ -906,13 +742,11 @@
                     var lName = document.getElementById("enableLastName");
                     lName.value = accountRequestDetail.lastName;
 
-
                     var email = document.getElementById("enableEmail")
                     email.value = accountRequestDetail.email;
                 },
                 error: function (e) {
-
-                    alert("this code will only execute if javascript is unable to access the webservice");
+                    alert("Error communicating with the server.");
                 }
             });
         }
@@ -923,10 +757,6 @@
             var webMethod = "ProjectServices.asmx/EnableAccount";
             var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
 
-            console.log("web service id value: " + employeeIdValue);
-
-
-            //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
@@ -936,13 +766,9 @@
                 dataType: "json",
                 success: function (msg) {
                     var enableAccountMsg = msg.d;
-
-                    console.log(enableAccountMsg);
-
                 },
                 error: function (e) {
-
-                    alert("this code will only execute if javascript is unable to access the webservice");
+                    alert("Error communicating with the server.");
                 }
             });
         }
@@ -963,10 +789,6 @@
             var webMethod = "ProjectServices.asmx/DisableAdmin";
             var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\"}";
 
-            console.log("web service id value: " + employeeIdValue);
-
-
-            //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
@@ -976,13 +798,9 @@
                 dataType: "json",
                 success: function (msg) {
                     var enableAccountMsg = msg.d;
-
-                    console.log(enableAccountMsg);
-
                 },
                 error: function (e) {
-
-                    alert("this code will only execute if javascript is unable to access the webservice");
+                    alert("Error communicating with the server.");
                 }
             });
         }
@@ -993,10 +811,6 @@
             var webMethod = "ProjectServices.asmx/MakeAdmin";
             var parameters = "{\"employeeId\":\"" + encodeURI(employeeIdValue) + "\", \"enableFlag\":\"" + "X" + "\"}";
 
-            console.log("web service id value: " + employeeIdValue);
-
-
-            //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
@@ -1007,12 +821,9 @@
                 success: function (msg) {
                     var disableAccountMsg = msg.d;
 
-                    console.log(disableAccountMsg);
-
                 },
                 error: function (e) {
-
-                    alert("this code will only execute if javascript is unable to access the webservice");
+                    alert("Error communicating with the server.");
                 }
             });
         }
@@ -1028,17 +839,10 @@
             var q4value = document.getElementById("Q4").value;
             var q4Rating = globalRating4;
             var department = globalChosenDepartment;
-
-            // var department = selectedDepartment();
-
-            // console.log("Chosen Department: " + department);
             
             var webMethod = "ProjectServices.asmx/InsertFeedBack";
             var parameters = "{\"EmployeeId\":\"" + encodeURI(globalEmployeeId) + "\",\"department\":\"" + encodeURI(department) + "\",\"FB1\":\"" + encodeURI(q1value) + "\",\"FBR1\":\"" + encodeURI(q1Rating) + "\",\"FB2\":\"" + encodeURI(q2value) + "\",\"FBR2\":\"" + encodeURI(q2Rating) + "\",\"FB3\":\"" + encodeURI(q3value) + "\",\"FBR3\":\"" + encodeURI(q3Rating) + "\",\"FB4\":\"" + encodeURI(q4value) + "\",\"FBR4\":\"" + encodeURI(q4Rating) + "\"}";
             
-            console.log(parameters);
-
-            //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
@@ -1049,14 +853,10 @@
                 success: function (msg) {
                     var responseFromServer = msg.d;
 
-                    console.log(responseFromServer);
-
                     goToHome(globalAdminFlag);
-
                 },
                 error: function (e) {
-
-                    alert("this code will only execute if javascript is unable to access the webservice");
+                    alert("Error communicating with the server.");
                 }
             });
         }
@@ -1065,10 +865,7 @@
 
             $('input[name*="rating1"]').change(function () {
                 var me = $(this);
-
                 var ratingValue1 = me.attr('value');
-
-                console.log("rating1: " + ratingValue1);
 
                 globalRating1 = ratingValue1;
 
@@ -1076,10 +873,7 @@
 
             $('input[name*="rating2"]').change(function () {
                 var me = $(this);
-
                 var ratingValue2 = me.attr('value');
-
-                console.log("rating2: " + ratingValue2);
 
                 globalRating2 = ratingValue2;
 
@@ -1087,10 +881,7 @@
 
             $('input[name*="rating3"]').change(function () {
                 var me = $(this);
-
                 var ratingValue3 = me.attr('value');
-
-                console.log("rating3: " + ratingValue3);
 
                 globalRating3 = ratingValue3;
 
@@ -1098,10 +889,7 @@
 
             $('input[name*="rating4"]').change(function () {
                 var me = $(this);
-
                 var ratingValue4 = me.attr('value');
-
-                console.log("rating4: " + ratingValue4);
 
                 globalRating4 = ratingValue4;
 
@@ -1112,23 +900,19 @@
             globalChosenDepartment = department;
         }
 
-        function filteredDepartment(department) {
-            
-            if (department != "view all") {
+        function filteredDepartment(department) {           
+            if (department != "View All") {
                 var splicedString = department.slice(0, -1);
-                globalFilteredDepartment = "filter: " + splicedString;
+                globalFilteredDepartment = splicedString;
             } else {
-                globalFilteredDepartment = "filter: " + department;
-            }
-              
+                globalFilteredDepartment = department;
+            }           
         }
 
     </script>
-    <!--END OF YOUR OWN JAVASCRIPT-->
 
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <!--AND YOUR OWN CSS CAN GO HERE AS WELL-->
 
     <style>
         * {
@@ -1389,7 +1173,6 @@
             display: block;
         }
 
-        /*normal colors*/
         .blu {
             background-color: #0f3bfc;
         }
@@ -1422,7 +1205,6 @@
             background-color: #c60aff;
         }
 
-        /*pale colors*/
         .pblu {
             background-color: #bae1ff;
         }
@@ -1471,10 +1253,6 @@
             border: none;
             border-radius: 4px;
         }
-
-            /*input[type="text"]:hover, input[type="password"]:hover {
-                border: 1px solid #949494;
-            }*/
 
         .hoverPBlu:hover {
             color: #75c0fa;
@@ -1541,63 +1319,48 @@
         }
 
         .star-cb-group {
-            /* remove inline-block whitespace */
             font-size: 0;
-            /* flip the order so we can use the + and ~ combinators */
             unicode-bidi: bidi-override;
             direction: rtl;
-            /* the hidden clearer */
         }
 
-            .star-cb-group * {
-                font-size: 1rem;
-            }
+        .star-cb-group * {
+            font-size: 1rem;
+        }
 
-            .star-cb-group > input {
-                display: none;
-            }
+        .star-cb-group > input {
+            display: none;
+        }
 
-                .star-cb-group > input + label {
-                    display: inline-block;
-                    cursor: pointer;
-                }
+        .star-cb-group > input + label {
+            display: inline-block;
+            cursor: pointer;
+        }
 
-            .star-cb-group label:before {
-                content: '\f005';
-                font-family: fontAwesome;
-                position: relative;
-                display: block;
-                font-size: 30px;
-                color: white;
-                text-shadow: 0 2px 5px rgba(0, 0, 0, .5);
-            }
+        .star-cb-group label:before {
+            content: '\f005';
+            font-family: fontAwesome;
+            position: relative;
+            display: block;
+            font-size: 30px;
+            color: white;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+        }
 
-            .star-cb-group > input:checked ~ label:before, .star-cb-group > input {
-                content: '\f005';
-                font-family: fontAwesome;
-                color: yellow;
-            }
+        .star-cb-group > input:checked ~ label:before, .star-cb-group > input {
+           content: '\f005';
+           font-family: fontAwesome;
+           color: yellow;
+        }
 
-            .star-cb-group > .star-cb-clear + label {
-                width: .5em;
-                margin-left: -.5em;
-            }
+        .star-cb-group > .star-cb-clear + label {
+           width: .5em;
+           margin-left: -.5em;
+        }
 
-                .star-cb-group > .star-cb-clear + label:before {
-                    width: .5em;
-                }
-
-            /*.star-cb-group:hover > input + label:before {
-                content: '\f005';
-                font-family: fontAwesome;
-                color: white;
-            }
-
-            .star-cb-group:hover > input + label:hover ~ label:before, .star-cb-group:hover > input + label:hover:before {
-                content: '\f005';
-                font-family: fontAwesome;
-                color: yellow;
-            }*/
+        .star-cb-group > .star-cb-clear + label:before {
+           width: .5em;
+        }
 
         .transBut {
             background-color: rgba(0, 0, 0, 0);
@@ -1659,11 +1422,11 @@
             color: black;
         }
 
-            .accountLA:hover {
-                text-decoration: none;
-                color: navy;
-                cursor: pointer;
-            }
+        .accountLA:hover {
+            text-decoration: none;
+            color: navy;
+            cursor: pointer;
+        }
 
         #allfeedbackTable {
             font-family: arial, sans-serif;
@@ -1719,7 +1482,6 @@
             margin-bottom: 2%;
         }
     </style>
-    <!--END OF YOUR OWN CSS-->
 
 </head>
 <body>
@@ -1757,10 +1519,6 @@
             <br><br><br>
         </div>
         <br>
-
-        <!--<br><br>
-        <button class="whiteBut" onclick="javascript: TestButtonHandler();">Click here to test connection!</button>
-        <br>-->
     </div>
 
     <div id="homePage" class="tabContent">
@@ -1780,7 +1538,6 @@
             </div>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <!--<div class="col-lg-10 col-md-12 col-sm-12 blu"><button class="blu hoverBlu whiteBut tallBut" onclick="showTab(event, 'editProfilePage')">Edit Profile</button></div>-->
                 <div class="col-lg-10 col-md-12 col-sm-12 blu"><button class="blu hoverBlu whiteBut tallBut" onclick="LoadAccountEditDetail(globalEmployeeId)">Edit Profile</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
@@ -1977,7 +1734,6 @@
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 gry">
                     <ul id="pendingAccountRequestList">
-                        <!--<li class="accountList"><a onclick="showTab(event, 'accountApprovalPage')" class="accountLA">list accounts here</a></li>-->
                     </ul>
                 </div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
@@ -2094,7 +1850,7 @@
             <br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="LoadAllFeedback(); filteredDepartment('view all');">View all</button></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 gre"><button class="gre hoverGre whiteBut" onclick="LoadAllFeedback(); filteredDepartment('View All');">View all</button></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <div class="row">
@@ -2113,16 +1869,13 @@
             <br>
             <div class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
-                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2>Feedback List</h2><h3 id="filteredCategory">(filtered by)</h3></div>
+                <div class="col-lg-10 col-md-12 col-sm-12 wht titleHeader"><h2 id="filteredCategory">Feedback List</h2></div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
             </div>
             <br><br>
             <div id="allFeedbackContainer" class="row">
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>
                 <div class="col-lg-10 col-md-12 col-sm-12 gry">
-                         <!--<ul id="allFeedbackList" style="list-style-type:none;">
-                        <li class="accountList"><a href="#" class="accountLA">Sales: (sample feedback)</a></li>
-                        </ul>-->
                     <table id="allfeedbackTable" class="fixed_header">
                         <thead>
                             <tr>
@@ -2132,9 +1885,7 @@
                             </tr>
                         </thead>
                         <tbody id="allfeedbackTableBody">
-
-                        </tbody>
-                        
+                        </tbody>                       
                     </table>
                 </div>
                 <div class="col-lg-01 col-md-00 col-sm-00 wht"></div>

@@ -16,55 +16,13 @@ namespace ProjectTemplate
 
 	public class ProjectServices : System.Web.Services.WebService
 	{
-		////////////////////////////////////////////////////////////////////////
-		///replace the values of these variables with your database credentials
-		////////////////////////////////////////////////////////////////////////
 		private string dbID = "runtime";
 		private string dbPass = "!!Cis440";
 		private string dbName = "runtime";
 
-
-
-
-        ////////////////////////////////////////////////////////////////////////
-        ///call this method anywhere that you need the connection string!
-        ////////////////////////////////////////////////////////////////////////
         private string getConString() {
 			return "SERVER=107.180.1.16; PORT=3306; DATABASE=" + dbName+"; UID=" + dbID + "; PASSWORD=" + dbPass;
 		}
-
-
-
-
-		/////////////////////////////////////////////////////////////////////////
-		//don't forget to include this decoration above each method that you want
-		//to be exposed as a web service!
-		[WebMethod(EnableSession = true)]
-		/////////////////////////////////////////////////////////////////////////
-		public string TestConnection()
-		{
-			try
-			{
-				string testQuery = "select * from test";
-
-				////////////////////////////////////////////////////////////////////////
-				///here's an example of using the getConString method!
-				////////////////////////////////////////////////////////////////////////
-				MySqlConnection con = new MySqlConnection(getConString());
-				////////////////////////////////////////////////////////////////////////
-
-				MySqlCommand cmd = new MySqlCommand(testQuery, con);
-				MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-				DataTable table = new DataTable();
-				adapter.Fill(table);
-				return "Success!";
-			}
-			catch (Exception e)
-			{
-				return "Something went wrong, please check your credentials and db name and try again.  Error: "+e.Message;
-			}
-		}
-
 
         [WebMethod(EnableSession = true)]
         public CurrentLogon LogOn(string uid, string pass)
@@ -77,9 +35,8 @@ namespace ProjectTemplate
             currentLogon.success = false;
             currentLogon.adminFlag = false;
 
-            //our connection string comes from our web.config file like we talked about earlier
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
-            //here's our query.  A basic select with nothing fancy.  Note the parameters that begin with @
+
             string sqlSelect = "SELECT employeeId, adminFlag FROM Account WHERE employeeId=@idValue and AcctPassword=@passValue";
 
             //set up our connection object to be ready to use our connection string
@@ -114,10 +71,8 @@ namespace ProjectTemplate
 
             }
             
-            //return the result!
             return currentLogon;
         }
-
 
         [WebMethod(EnableSession = true)]
         public PendingAccountRequest[] GetAccountRequests()
@@ -156,23 +111,15 @@ namespace ProjectTemplate
         {
             PendingAccountRequest pendingAccount = new PendingAccountRequest();
             
-            //our connection string comes from our web.config file like we talked about earlier
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
-            //here's our query.  A basic select with nothing fancy.  Note the parameters that begin with @
-            // string sqlSelect = "SELECT employeeId, adminFlag FROM Account WHERE employeeId=@idValue and AcctPassword=@passValue";
+
             string sql = "SELECT * FROM AccountRequest WHERE EmployeeId=@idValue";
 
-            //set up our connection object to be ready to use our connection string
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             sqlConnection.Open();
 
-
-            //set up our command object to use our connection, and our query
             MySqlCommand sqlCommand = new MySqlCommand(sql, sqlConnection);
 
-            //tell our command to replace the @parameters with real values
-            //we decode them because they came to us via the web so they were encoded
-            //for transmission (funky characters escaped, mostly)
             sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(employeeId));
 
             try
@@ -200,7 +147,6 @@ namespace ProjectTemplate
                     sqlConnection.Close();
                 }
             }
-
             return pendingAccount;
         }
 
@@ -345,23 +291,15 @@ namespace ProjectTemplate
         {
             Account currentAccount = new Account();
 
-            //our connection string comes from our web.config file like we talked about earlier
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
-            //here's our query.  A basic select with nothing fancy.  Note the parameters that begin with @
-            // string sqlSelect = "SELECT employeeId, adminFlag FROM Account WHERE employeeId=@idValue and AcctPassword=@passValue";
+
             string sql = "SELECT * FROM Account WHERE EmployeeId=@idValue";
 
-            //set up our connection object to be ready to use our connection string
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             sqlConnection.Open();
 
-
-            //set up our command object to use our connection, and our query
             MySqlCommand sqlCommand = new MySqlCommand(sql, sqlConnection);
 
-            //tell our command to replace the @parameters with real values
-            //we decode them because they came to us via the web so they were encoded
-            //for transmission (funky characters escaped, mostly)
             sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(employeeId));
 
             try
@@ -392,7 +330,6 @@ namespace ProjectTemplate
                     sqlConnection.Close();
                 }
             }
-
             return currentAccount;
         }
 
@@ -463,7 +400,7 @@ namespace ProjectTemplate
                     
                 });
             }
-            //convert the list of accounts to an array and return!
+            //convert the list of accounts to an array and return
             return activeAccount.ToArray();
         }
 
@@ -582,7 +519,7 @@ namespace ProjectTemplate
                     email = sqlDt.Rows[i]["Email"].ToString(),
                 });
             }
-            //convert the list of accounts to an array and return!
+            //convert the list of accounts to an array and return
             return disabledAccount.ToArray();
         }
 
@@ -732,7 +669,6 @@ namespace ProjectTemplate
             MySqlConnection conn = new MySqlConnection(connStr);
             string sql = "INSERT INTO Feedback (EmployeeId, Department, FeedbackText1, FeedbackRating1, FeedbackText2,FeedbackRating2,FeedbackText3,FeedbackRating3,FeedbackText4,FeedbackRating4) VALUES (@idValue, @depValue, @FBT1Value, @FBR1Value, @FBT2Value,@FBR2Value,@FBT3Value,@FBR3Value,@FBT4Value,@FBR4Value);"; 
             
-
             MySqlCommand cmd = new MySqlCommand(sql, conn);
            
             cmd.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(EmployeeId));
@@ -745,7 +681,6 @@ namespace ProjectTemplate
             cmd.Parameters.AddWithValue("@FBR3Value", HttpUtility.UrlDecode(FBR3));
             cmd.Parameters.AddWithValue("@FBT4Value", HttpUtility.UrlDecode(FB4));
             cmd.Parameters.AddWithValue("@FBR4Value", HttpUtility.UrlDecode(FBR4));
-
 
             try
             {
@@ -807,7 +742,7 @@ namespace ProjectTemplate
                     overallRating = Convert.ToDouble(sqlDt.Rows[i]["OverallRating"])
                 });
             }
-            //convert the list of accounts to an array and return!
+            //convert the list of accounts to an array and return
             return allFeedback.ToArray();
         }
 
@@ -852,7 +787,7 @@ namespace ProjectTemplate
                     overallRating = Convert.ToDouble(sqlDt.Rows[i]["OverallRating"])
                 });
             }
-            //convert the list of accounts to an array and return!
+            //convert the list of accounts to an array and return
             return filteredFeedback.ToArray();
         }
 
@@ -868,7 +803,6 @@ namespace ProjectTemplate
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
-
 
             sqlCommand.Parameters.AddWithValue("@recordId", HttpUtility.UrlDecode(recordIdValue));
 
