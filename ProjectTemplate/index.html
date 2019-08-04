@@ -215,7 +215,13 @@
 
         //Dispalys all feedback on feedback list page
         function LoadAllFeedback() {
-            //$("##allFeedbackTable:not(:first)").remove();
+            //$("#allfeedbackTable:not(:first)").remove();
+
+            displayTable = document.getElementById("allfeedbackTable");
+
+            for (var i = displayTable.rows.length; i > 1; i--) {
+                displayTable.deleteRow(i - 1);
+            }
 
             var webMethod = "ProjectServices.asmx/GetAllFeedback";
             $.ajax({
@@ -260,9 +266,17 @@
 
         //Dispalys filtered feedback on feedback list page
         function LoadFilteredFeedback(departmentValue) {
-            //$("##allFeedbackTable:not(:first)").remove();
+            //$("#allfeedbackTable:not(:first)").remove();
+
+            displayTable = document.getElementById("allfeedbackTable");
+
+            for (var i = displayTable.rows.length; i > 1; i--) {
+                displayTable.deleteRow(i - 1);
+            }
 
             var webMethod = "ProjectServices.asmx/GetFilteredFeedback";
+            var parameters = "{\"departmentValue\":\"" + encodeURI(departmentValue) + "\"}";
+
             $.ajax({
                 type: "POST",
                 url: webMethod,
@@ -287,8 +301,9 @@
                             $("#allfeedbackTable tbody").append(row);
                             //$("#allfeedbackTable").append(feedbackItem);
                         }
-
-
+                        
+                        var filterHeader = document.getElementById("filteredCategory");
+                        filterHeader.innerHTML = globalFilteredDepartment;
 
                         document.getElementById('loginPage').style.display = "none";
                         showTab(event, 'feedbackListPage');
@@ -303,13 +318,9 @@
         //Dispalys feedback detail on feedback details page
         function LoadFeedbackDetail(recordIdValue) {
 
-            var webMethod = "ProjectServices.asmx/GetFeedbackDetail";
-            //should maybe be recordIdValue?
+            var webMethod = "ProjectServices.asmx/GetFeedbackDetail";            
             var parameters = "{\"recordIdValue\":\"" + encodeURI(recordIdValue) + "\"}";
-
-
-
-
+                                   
             $.ajax({
                 type: "POST",
                 url: webMethod,
