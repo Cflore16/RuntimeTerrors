@@ -335,12 +335,12 @@
                     starRatingElements = document.getElementsByClassName("viewFeedbackRatingStar");
 
                     for (var i = 0; i < starRatingElements.length; i++) {
-                        debugger;
+                        
                         starRatingElements[i].disabled = false;
                     }
 
                     for (var i = 0; i < starRatingElements.length; i++) {
-                        debugger;
+                       
                         starRatingElements[i].disabled = true;
                     }
 
@@ -1561,7 +1561,7 @@
                 text-shadow: 0 2px 5px rgba(0, 0, 0, .5);
             }
 
-            .star-cb-group > input:checked ~ label:before, .star-cb-group > input + label:hover ~ label:before, .star-cb-group > input + label:hover:before {
+            .star-cb-group > input:checked ~ label:before, .star-cb-group > input {
                 content: '\f005';
                 font-family: fontAwesome;
                 color: yellow;
@@ -1576,7 +1576,7 @@
                     width: .5em;
                 }
 
-            .star-cb-group:hover > input + label:before {
+            /*.star-cb-group:hover > input + label:before {
                 content: '\f005';
                 font-family: fontAwesome;
                 color: white;
@@ -1586,7 +1586,7 @@
                 content: '\f005';
                 font-family: fontAwesome;
                 color: yellow;
-            }
+            }*/
 
         .transBut {
             background-color: rgba(0, 0, 0, 0);
